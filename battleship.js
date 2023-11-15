@@ -50,7 +50,12 @@ class Battleship {
             console.log();
             console.log("Player, it's your turn");
             console.log("Enter coordinates for your shot :");
-            var position = Battleship.ParsePosition(readline.question());
+            
+            let position;
+            do {
+                position = Battleship.ParseShotPosition(readline.question());
+            } while (!position);
+
             var isHit = gameController.CheckIsHit(this.enemyFleet, position);
 
             telemetryWorker.postMessage({eventName: 'Player_ShootPosition', properties:  {Position: position.toString(), IsHit: isHit}});
@@ -96,7 +101,20 @@ class Battleship {
     static ParsePosition(input) {
         var letter = letters.get(input.toUpperCase().substring(0, 1));
         var number = parseInt(input.substring(1, 2), 10);
+
         return new position(letter, number);
+    }
+
+    static ParseShotPosition(input) {
+        var letter = letters.get(input.toUpperCase().substring(0, 1));
+        var number = parseInt(input.substring(1), 10);
+
+        if (letter && number && letter >= letters.A && letter <= letters.H && number >= 1 && number <= 8) {
+            return new position(letter, number);
+        }
+
+        console.log('This position is outside of the playing field, please shoot again');
+        return null;
     }
 
     GetRandomPosition() {
