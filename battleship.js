@@ -8,6 +8,11 @@ const letters = require("./GameController/letters.js");
 let telemetryWorker;
 
 class Battleship {
+
+    constructor() {
+        this.playerHits = [];
+        this.computerHits = [];
+      }
     start() {
         telemetryWorker = new Worker("./TelemetryClient/telemetryClient.js");   
 
@@ -68,6 +73,12 @@ class Battleship {
                 console.log("                   \\  \\   /  /");
             }
 
+            if (isHit) {
+                this.playerHits.push(position);
+                const sunkShips = gameController.getSunkShips(this.enemyFleet, this.playerHits);
+                console.log("Sunk ships: ", sunkShips.map(ship => ship.name).join(", "));
+              }
+
             console.log(isHit ? "Yeah ! Nice hit !" : "Miss");
 
             var computerPos = this.GetRandomPosition();
@@ -88,6 +99,12 @@ class Battleship {
                 console.log("            -   (\\- |  \\ /  |  /)  -");
                 console.log("                 -\\  \\     /  /-");
                 console.log("                   \\  \\   /  /");
+
+                if (isHit) {
+                    this.computerHits.push(computerPos);
+                    const sunkShips = gameController.getSunkShips(this.myFleet, this.computerHits);
+                    console.log("Computer sunk ships: ", sunkShips.map(ship => ship.name).join(", "));
+                  }
             }
         }
         while (true);
