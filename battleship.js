@@ -55,7 +55,7 @@ class Battleship {
             const playerSunkShips = gameController.getSunkShips(this.enemyFleet, this.playerHits);
       const playerRemainingShipTypes = gameController.getRemainingShipTypes(this.enemyFleet, this.playerHits);
       console.log("Player:");
-      console.log("  Sunk enemy ships: ", playerSunkShips.map(ship => ship.name).join(", "));
+      console.log("  Your sunk ships: ", playerSunkShips.map(ship => ship.name).join(", "));
       console.log("  Remaining enemy ship types: ", playerRemainingShipTypes.join(", "));
 
       // ...
@@ -95,7 +95,7 @@ class Battleship {
             if (isHit) {
                 this.playerHits.push(position);
                 const sunkShips = gameController.getSunkShips(this.enemyFleet, this.playerHits);
-                console.log("Your sunk ships: ", sunkShips.map(ship => ship.name).join(", "));
+                console.log("Sunk ships: ", sunkShips.map(ship => ship.name).join(", "));
               }
 
             console.log(isHit ? "Yeah ! Nice hit !" : "Miss");
