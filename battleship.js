@@ -95,7 +95,7 @@ class Battleship {
             if (isHit) {
                 this.playerHits.push(position);
                 const sunkShips = gameController.getSunkShips(this.enemyFleet, this.playerHits);
-                console.log("Sunk ships: ", sunkShips.map(ship => ship.name).join(", "));
+                console.log("Your sunk ships: ", sunkShips.map(ship => ship.name).join(", "));
               }
 
             console.log(isHit ? "Yeah ! Nice hit !" : "Miss");
