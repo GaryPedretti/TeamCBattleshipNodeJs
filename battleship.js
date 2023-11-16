@@ -52,6 +52,20 @@ class Battleship {
         console.log("    \"\"\"\"");
 
         do {
+            const playerSunkShips = gameController.getSunkShips(this.enemyFleet, this.playerHits);
+      const playerRemainingShipTypes = gameController.getRemainingShipTypes(this.enemyFleet, this.playerHits);
+      console.log("Player:");
+      console.log("  Sunk enemy ships: ", playerSunkShips.map(ship => ship.name).join(", "));
+      console.log("  Remaining enemy ship types: ", playerRemainingShipTypes.join(", "));
+
+      // ...
+
+      const computerSunkShips = gameController.getSunkShips(this.myFleet, this.computerHits);
+      const computerRemainingShipTypes = gameController.getRemainingShipTypes(this.myFleet, this.computerHits);
+      console.log("Computer:");
+      console.log("  Sunk your ships: ", computerSunkShips.map(ship => ship.name).join(", "));
+      console.log("  Your remaining ship types: ", computerRemainingShipTypes.join(", "));
+      console.log();
             console.log();
             console.log("Player, it's your turn");
             console.log("Enter coordinates for your shot :");
@@ -172,6 +186,8 @@ class Battleship {
 
         this.enemyFleet[4].addPosition(new position(letters.C, 5));
         this.enemyFleet[4].addPosition(new position(letters.C, 6));
+
+        
     }
 }
 

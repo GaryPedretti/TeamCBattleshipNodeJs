@@ -34,7 +34,12 @@ class GameController {
     static getSunkShips(fleet, hits) {
       return fleet.filter(ship => ship.isSunk(hits));
     }
-  }
+    static getRemainingShipTypes(fleet, hits) {
+        const sunkShips = fleet.filter(ship => ship.isSunk(hits));
+        const sunkShipNames = new Set(sunkShips.map(ship => ship.name));
+        return fleet.map(ship => ship.name).filter(name => !sunkShipNames.has(name));
+      }
+    }
 
 
 module.exports = GameController;
