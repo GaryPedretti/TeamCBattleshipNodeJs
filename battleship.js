@@ -47,9 +47,11 @@ class Battleship {
         console.log("    \"\"\"\"");
 
         do {
-            console.log();
+
+            console.log('--------------------------------------------------------------------------------------------------------');
             console.log(cliColor.green("Player, it's your turn"));
             console.log(cliColor.green("Enter coordinates for your shot :"));
+            console.log(cliColor.green("Pick a spot to attack (A-H, 1-8 eg B4).  Press ctrl-c to surrender."));
             var position = Battleship.ParsePosition(readline.question());
             var isHit = gameController.CheckIsHit(this.enemyFleet, position);
 
