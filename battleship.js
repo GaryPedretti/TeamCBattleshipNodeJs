@@ -7,8 +7,8 @@ const position = require("./GameController/position.js");
 const letters = require("./GameController/letters.js");
 let telemetryWorker;
 //comment to create develop branch
-class Battleship {
-    start() {
+class Battleship {    
+    start() {        
         telemetryWorker = new Worker("./TelemetryClient/telemetryClient.js");   
 
         console.log("Starting...");
@@ -31,9 +31,9 @@ class Battleship {
 
         this.InitializeGame();
         this.StartGame();
-    }
+    }   
 
-    StartGame() {
+    StartGame() {        
         console.clear();
         console.log("                  __");
         console.log("                 /  \\");
@@ -55,18 +55,7 @@ class Battleship {
 
             telemetryWorker.postMessage({eventName: 'Player_ShootPosition', properties:  {Position: position.toString(), IsHit: isHit}});
 
-            if (isHit) {
-                beep();
-
-                console.log("                \\         .  ./");
-                console.log("              \\      .:\";'.:..\"   /");
-                console.log("                  (M^^.^~~:.'\").");
-                console.log("            -   (/  .    . . \\ \\)  -");
-                console.log("               ((| :. ~ ^  :. .|))");
-                console.log("            -   (\\- |  \\ /  |  /)  -");
-                console.log("                 -\\  \\     /  /-");
-                console.log("                   \\  \\   /  /");
-            }
+            this.OutputHit(isHit);
 
             console.log(isHit ? "Yeah ! Nice hit !" : "Miss");
 
@@ -77,21 +66,11 @@ class Battleship {
 
             console.log();
             console.log(`Computer shot in ${computerPos.column}${computerPos.row} and ` + (isHit ? `has hit your ship !` : `miss`));
-            if (isHit) {
-                beep();
-
-                console.log("                \\         .  ./");
-                console.log("              \\      .:\";'.:..\"   /");
-                console.log("                  (M^^.^~~:.'\").");
-                console.log("            -   (/  .    . . \\ \\)  -");
-                console.log("               ((| :. ~ ^  :. .|))");
-                console.log("            -   (\\- |  \\ /  |  /)  -");
-                console.log("                 -\\  \\     /  /-");
-                console.log("                   \\  \\   /  /");
-            }
+            
+            this.OutputHit(isHit);
         }
         while (true);
-    }
+    }    
 
     static ParsePosition(input) {
         var letter = letters.get(input.toUpperCase().substring(0, 1));
@@ -107,6 +86,30 @@ class Battleship {
         var number = Math.floor((Math.random() * rows));
         var result = new position(letter, number);
         return result;
+    }
+
+    OutputHit(isHit){
+        if (isHit) {
+            beep();
+
+            colorizeText("                \\         .  ./", cliColor.red);
+            colorizeText("              \\      .:\";'.:..\"   /", cliColor.red);
+            colorizeText("                  (M^^.^~~:.'\").", cliColor.red);
+            colorizeText("            -   (/  .    . . \\ \\)  -", cliColor.red);
+            colorizeText("               ((| :. ~ ^  :. .|))", cliColor.red);
+            colorizeText("            -   (\\- |  \\ /  |  /)  -", cliColor.red);
+            colorizeText("                 -\\  \\     /  /-", cliColor.red);
+            colorizeText("                   \\  \\   /  /", cliColor.red);
+        } else {
+            colorizeText("~~~~~~~~~~~~~~~~~~~~", cliColor.blue);
+            colorizeText("~~~~~~~~~~~~~~~~~~~~", cliColor.blue);
+            colorizeText("~~~~~~~~~~~~~~~~~~~~", cliColor.blue);
+            colorizeText("~~~~~~~~~~~~~~~~~~~~", cliColor.blue);
+            colorizeText("~~~~~~~~~~~~~~~~~~~~", cliColor.blue);
+            colorizeText("~~~~~~~~~~~~~~~~~~~~", cliColor.blue);
+            colorizeText("~~~~~~~~~~~~~~~~~~~~", cliColor.blue);
+            colorizeText("~~~~~~~~~~~~~~~~~~~~", cliColor.blue);
+        }
     }
 
     InitializeGame() {
@@ -156,6 +159,10 @@ class Battleship {
         this.enemyFleet[4].addPosition(new position(letters.C, 5));
         this.enemyFleet[4].addPosition(new position(letters.C, 6));
     }
+}
+
+function colorizeText(message, color) {
+    console.log(color(message));
 }
 
 module.exports = Battleship;
