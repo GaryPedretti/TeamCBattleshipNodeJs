@@ -4,11 +4,13 @@ class Ship {
         this.size = size;
         this.color = color;
         this.positions = [];
+        this.isSunk = false;
     }
 
     addPosition(position) {
         this.positions.push(position);
     }
+
 }
 
 module.exports = Ship;
