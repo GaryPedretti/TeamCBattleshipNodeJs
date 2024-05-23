@@ -33,6 +33,13 @@ class Battleship {
         this.StartGame();
     }   
 
+    printRemainingShips(fleet){
+        fleet.forEach(ship=>{
+            console.log(ship.name);
+        })
+        
+    }
+
     StartGame() {        
         console.clear();
         console.log("                  __");
@@ -48,10 +55,14 @@ class Battleship {
 
         do {
 
+            console.log("Remaining enemies: ");
+
+            this.printRemainingShips(this.enemyFleet);
+
             console.log('--------------------------------------------------------------------------------------------------------');
             console.log(cliColor.green("Player, it's your turn"));
-            console.log(cliColor.green("Enter coordinates for your shot :"));
             console.log(cliColor.green("Pick a spot to attack (A-H, 1-8 eg B4).  Press ctrl-c to surrender."));
+            console.log(cliColor.green("Enter coordinates for your shot :"));
             var position = Battleship.ParsePosition(readline.question());
             var isHit = gameController.CheckIsHit(this.enemyFleet, position);
 
@@ -60,6 +71,11 @@ class Battleship {
             this.OutputHit(isHit);
 
             console.log(isHit ? cliColor.red("Yeah ! Nice hit !") : cliColor.yellow("Miss"));
+
+
+            console.log("Player Remaining Ships: ");
+
+            this.printRemainingShips(this.myFleet);
 
             var computerPos = this.GetRandomPosition();
             var isHit = gameController.CheckIsHit(this.myFleet, computerPos);
