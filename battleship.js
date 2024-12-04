@@ -217,7 +217,7 @@ class Battleship {
     );
     let reply = "";
     do {
-      console.log("Do you want to play again? (Y/N)");
+      console.log(cliColor.green("Do you want to play again? (Y/N)"));
       reply = readline.question();
     } while (reply.toLowerCase() !== "y" && reply.toLowerCase() !== "n");
 
