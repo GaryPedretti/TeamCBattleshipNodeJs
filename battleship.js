@@ -5,7 +5,9 @@ const cliColor = require('cli-color');
 const beep = require('beepbeep');
 const position = require("./GameController/position.js");
 const letters = require("./GameController/letters.js");
+const gameboardController = require("./GameController/gameboard.js");
 let telemetryWorker;
+let gameboard;
 
 class Battleship {
     start() {
@@ -116,8 +118,10 @@ class Battleship {
 
     InitializeMyFleet() {
         this.myFleet = gameController.InitializeShips();
+        this.gameboard = new gameboardController(letters.H, 8);
 
         console.log("Please position your fleet (Game board size is from A to H and 1 to 8) :");
+        this.gameboard.drawGameBoard();
 
         this.myFleet.forEach(function (ship) {
             console.log();
