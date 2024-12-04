@@ -5,6 +5,7 @@ const cliColor = require("cli-color");
 const beep = require("beepbeep");
 const position = require("./GameController/position.js");
 const letters = require("./GameController/letters.js");
+const { matchesGlob } = require("path");
 let telemetryWorker;
 
 class Battleship {
@@ -77,8 +78,8 @@ class Battleship {
 
     do {
       console.log();
-      console.log(cliColor.green("Player, it's your turn"));
-      console.log(cliColor.green("Enter coordinates for your shot :"));
+      Battleship.WriteConsoleColoredMessage(`Player, it's your turn`, cliColor.green );
+      Battleship.WriteConsoleColoredMessage(`Enter coordinates for your shot :`, cliColor.green );
       var position = Battleship.ParsePosition(readline.question());
       var isHit = gameController.CheckIsHit(this.enemyFleet, position);
 
@@ -98,9 +99,9 @@ class Battleship {
         console.log("            -   (\\- |  \\ /  |  /)  -");
         console.log("                 -\\  \\     /  /-");
         console.log("                   \\  \\   /  /");
-        console.log(cliColor.red("Yeah! Nice hit!"));
+        Battleship.WriteConsoleColoredMessage(`Yeah! Nice hit!`, cliColor.red );
       } else {
-        console.log(cliColor.blue("Miss"));
+        Battleship.WriteConsoleColoredMessage(`Miss`, cliColor.blue );
       }
 
       var computerPos = this.GetRandomPosition();
@@ -114,17 +115,9 @@ class Battleship {
       console.log();
 
       if (isHit) {
-        console.log(
-          cliColor.red(
-            `Computer shot in ${computerPos.column}${computerPos.row} and has hit your ship!`,
-          ),
-        );
+        Battleship.WriteConsoleColoredMessage(`Computer shot in ${computerPos.column}${computerPos.row} and has hit your ship!`, cliColor.red );
       } else {
-        console.log(
-          cliColor.blue(
-            `Computer shot in ${computerPos.column}${computerPos.row} and has missed!`,
-          ),
-        );
+        Battleship.WriteConsoleColoredMessage(`Computer shot in ${computerPos.column}${computerPos.row} and has missed!`, cliColor.blue );
       }
 
       if (isHit) {
@@ -141,6 +134,10 @@ class Battleship {
       }
     } while (true);
   }
+
+  static WriteConsoleColoredMessage( str , color ) {
+    console.log( color( str ) );
+    }
 
   static ParsePosition(input) {
     var letter = letters.get(input.toUpperCase().substring(0, 1));
@@ -165,24 +162,13 @@ class Battleship {
 
   InitializeMyFleet() {
     this.myFleet = gameController.InitializeShips();
-
-    console.log(
-      cliColor.green(
-        "Please position your fleet (Game board size is from A to H and 1 to 8) :",
-      ),
-    );
+    Battleship.WriteConsoleColoredMessage("Please position your fleet (Game board size is from A to H and 1 to 8) :", cliColor.green );
 
     this.myFleet.forEach(function (ship) {
       console.log();
-      console.log(
-        cliColor.green(
-          `Please enter the positions for the ${ship.name} (size: ${ship.size})`,
-        ),
-      );
+      Battleship.WriteConsoleColoredMessage(`Please enter the positions for the ${ship.name} (size: ${ship.size})`, cliColor.green );
       for (var i = 1; i < ship.size + 1; i++) {
-        console.log(
-          cliColor.green(`Enter position ${i} of ${ship.size} (i.e A3):`),
-        );
+        Battleship.WriteConsoleColoredMessage(`Enter position ${i} of ${ship.size} (i.e A3):`, cliColor.green );
         const position = readline.question();
         telemetryWorker.postMessage({
           eventName: "Player_PlaceShipPosition",
@@ -222,6 +208,10 @@ class Battleship {
     this.enemyFleet[4].addPosition(new position(letters.C, 5));
     this.enemyFleet[4].addPosition(new position(letters.C, 6));
   }
+
+  
 }
 
 module.exports = Battleship;
+
+
