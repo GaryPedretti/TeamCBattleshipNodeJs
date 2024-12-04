@@ -56,3 +56,9 @@ npm install
 npm test
 node index.js
 ```
+
+## Prettier
+
+```bash
+npx prettier . --write
+```
