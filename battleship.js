@@ -6,6 +6,7 @@ const beep = require('beepbeep');
 const position = require("./GameController/position.js");
 const letters = require("./GameController/letters.js");
 let telemetryWorker;
+let playGame = true;
 
 class Battleship {
     start() {
@@ -29,8 +30,10 @@ class Battleship {
         console.log(cliColor.magenta(" \\_________________________________________________________________________|"));
         console.log();
 
-        this.InitializeGame();
-        this.StartGame();
+        do {
+            this.InitializeGame();
+            this.StartGame();
+        } while (this.playAgain());
     }
 
     StartGame() {
@@ -48,8 +51,9 @@ class Battleship {
 
         do {
             console.log();
+            console.log("------------------------------------------------------------------------");
             console.log("Player, it's your turn");
-            console.log("Enter coordinates for your shot :");
+            console.log("Enter coordinates for your shot (i.e A3):");
             var position = Battleship.ParsePosition(readline.question());
             var isHit = gameController.CheckIsHit(this.enemyFleet, position);
 
@@ -117,6 +121,7 @@ class Battleship {
     InitializeMyFleet() {
         this.myFleet = gameController.InitializeShips();
 
+        console.log("------------------------------------------------------------------------");
         console.log("Please position your fleet (Game board size is from A to H and 1 to 8) :");
 
         this.myFleet.forEach(function (ship) {
@@ -155,6 +160,15 @@ class Battleship {
 
         this.enemyFleet[4].addPosition(new position(letters.C, 5));
         this.enemyFleet[4].addPosition(new position(letters.C, 6));
+    }
+
+    playAgain() {
+        console.log("------------------------------------------------------------------------");
+        let reply = "";
+        do {
+            console.log("Do you want to play again? (Y/N)");
+            const reply = readline.question();
+        } while (reply)
     }
 }
 
