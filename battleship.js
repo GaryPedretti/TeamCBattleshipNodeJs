@@ -179,7 +179,7 @@ class Battleship {
 
   InitializeMyFleet() {
     this.myFleet = gameController.InitializeShips();
-    this.gameboard = new gameboardController(letters.H, 8);
+    this.gameboard = new gameboardController(letters.H.value, 8);
 
 
     console.log(
