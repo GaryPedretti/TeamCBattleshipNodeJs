@@ -81,12 +81,15 @@ class Battleship {
 
     do {
       console.log();
+      console.log(
+        "------------------------------------------------------------------------",
+      );
       Battleship.WriteConsoleColoredMessage(
         `Player, it's your turn`,
         cliColor.green,
       );
       Battleship.WriteConsoleColoredMessage(
-        `Enter coordinates for your shot :`,
+        `Enter coordinates for your shot (i.e A3):`,
         cliColor.green,
       );
       var position = Battleship.ParsePosition(readline.question());
@@ -122,6 +125,9 @@ class Battleship {
       });
 
       console.log();
+      console.log(
+        "------------------------------------------------------------------------",
+      );
 
       if (isHit) {
         Battleship.WriteConsoleColoredMessage(
