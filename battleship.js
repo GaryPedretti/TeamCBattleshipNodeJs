@@ -6,6 +6,8 @@ const beep = require("beepbeep");
 const position = require("./GameController/position.js");
 const letters = require("./GameController/letters.js");
 const { matchesGlob } = require("path");
+const Ship = require("./GameController/ship.js");
+const { exit } = require("process");
 let telemetryWorker;
 let playGame = true;
 
@@ -64,6 +66,8 @@ class Battleship {
       this.InitializeGame();
       this.StartGame();
     } while (this.playAgain());
+
+    exit();
   }
 
   StartGame() {
@@ -147,12 +151,61 @@ class Battleship {
         console.log("                 -\\  \\     /  /-");
         console.log("                   \\  \\   /  /");
       }
+
+      if( this.CheckForGameEnd() )
+      {
+        break;
+      }
     } while (true);
   }
 
   static WriteConsoleColoredMessage(str, color) {
     console.log(color(str));
   }
+
+  CheckForGameEnd( )
+  {
+    var fleetDestroyed = true;
+    this.myFleet.forEach(function (ship) {
+      if( !ship.checkDestroyed() )
+      {
+        fleetDestroyed = false;
+      }
+      else if( !ship.printedMessage )
+      {
+        Battleship.WriteConsoleColoredMessage(`Your ${ship.name} is destroyed!`,cliColor.yellow);
+        ship.printedMessage = true;
+      }
+    } );
+
+    if( fleetDestroyed )
+    {
+      Battleship.WriteConsoleColoredMessage("You have lost!", cliColor.yellow );
+      return true;
+    }
+
+    var enemyDestroyed = true;
+    this.enemyFleet.forEach(function (ship) {
+      if( !ship.checkDestroyed() )
+      {
+        enemyDestroyed = false;
+      }
+      else if( !ship.printedMessage )
+      {
+        Battleship.WriteConsoleColoredMessage(`The enemies ${ship.name} is destroyed!`,cliColor.yellow);
+        ship.printedMessage = true;
+      }
+    } );
+
+    if( enemyDestroyed )
+    {
+      Battleship.WriteConsoleColoredMessage("You have won!", cliColor.yellow );
+      return true;
+    }
+
+    return false;
+  }
+
 
   static ParsePosition(input) {
     var letter = letters.get(input.toUpperCase().substring(0, 1));
@@ -182,6 +235,7 @@ class Battleship {
     console.log(
       "------------------------------------------------------------------------",
     );
+    /*
     Battleship.WriteConsoleColoredMessage(
       "Please position your fleet (Game board size is from A to H and 1 to 8) :",
       cliColor.green,
@@ -209,7 +263,7 @@ class Battleship {
         });
         ship.addPosition(Battleship.ParsePosition(position));
       }
-    });
+    });*/
   }
 
   InitializeEnemyFleet() {
@@ -248,7 +302,7 @@ class Battleship {
       reply = readline.question();
     } while (reply.toLowerCase() !== "y" && reply.toLowerCase() !== "n");
 
-    return answer.toUpperCase() === "Y" ? true : false;
+    return reply.toUpperCase() === "Y" ? true : false;
   }
 }
 
