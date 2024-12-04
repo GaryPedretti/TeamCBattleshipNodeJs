@@ -23,8 +23,7 @@ class GameController {
     ships.forEach(function (ship) {
       positionArrayIndex = 0;
       ship.positions.forEach((position) => {
-        if (position.row == shot.row && position.column == shot.column)
-        {
+        if (position.row == shot.row && position.column == shot.column) {
           ship.positionsHit[positionArrayIndex] = true;
           //console.log(`Ship ${ship.name} hit at ${position.column}${position.row} (position hit: ${positionArrayIndex})` );
           returnvalue = true;

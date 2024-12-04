@@ -13,13 +13,11 @@ class Ship {
     this.positions.push(position);
   }
 
-  checkDestroyed(){
+  checkDestroyed() {
     var destroyed = true;
 
-    for( let i = 0; i < this.size; i++ )
-    {
-      if( !this.positionsHit[i] )
-      {
+    for (let i = 0; i < this.size; i++) {
+      if (!this.positionsHit[i]) {
         destroyed = false;
       }
     }

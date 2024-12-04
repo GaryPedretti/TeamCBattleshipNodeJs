@@ -158,8 +158,7 @@ class Battleship {
         console.log("                   \\  \\   /  /");
       }
 
-      if( this.CheckForGameEnd() )
-      {
+      if (this.CheckForGameEnd()) {
         break;
       }
     } while (true);
@@ -169,49 +168,45 @@ class Battleship {
     console.log(color(str));
   }
 
-  CheckForGameEnd( )
-  {
+  CheckForGameEnd() {
     var fleetDestroyed = true;
     this.myFleet.forEach(function (ship) {
-      if( !ship.checkDestroyed() )
-      {
+      if (!ship.checkDestroyed()) {
         fleetDestroyed = false;
-      }
-      else if( !ship.printedMessage )
-      {
-        Battleship.WriteConsoleColoredMessage(`Your ${ship.name} is destroyed!`,cliColor.yellow);
+      } else if (!ship.printedMessage) {
+        Battleship.WriteConsoleColoredMessage(
+          `Your ${ship.name} is destroyed!`,
+          cliColor.yellow,
+        );
         ship.printedMessage = true;
       }
-    } );
+    });
 
-    if( fleetDestroyed )
-    {
-      Battleship.WriteConsoleColoredMessage("You have lost!", cliColor.yellow );
+    if (fleetDestroyed) {
+      Battleship.WriteConsoleColoredMessage("You have lost!", cliColor.yellow);
       return true;
     }
 
     var enemyDestroyed = true;
     this.enemyFleet.forEach(function (ship) {
-      if( !ship.checkDestroyed() )
-      {
+      if (!ship.checkDestroyed()) {
         enemyDestroyed = false;
-      }
-      else if( !ship.printedMessage )
-      {
-        Battleship.WriteConsoleColoredMessage(`The enemies ${ship.name} is destroyed!`,cliColor.yellow);
+      } else if (!ship.printedMessage) {
+        Battleship.WriteConsoleColoredMessage(
+          `The enemies ${ship.name} is destroyed!`,
+          cliColor.yellow,
+        );
         ship.printedMessage = true;
       }
-    } );
+    });
 
-    if( enemyDestroyed )
-    {
-      Battleship.WriteConsoleColoredMessage("You have won!", cliColor.yellow );
+    if (enemyDestroyed) {
+      Battleship.WriteConsoleColoredMessage("You have won!", cliColor.yellow);
       return true;
     }
 
     return false;
   }
-
 
   static ParsePosition(input) {
     var letter = letters.get(input.toUpperCase().substring(0, 1));
@@ -236,7 +231,6 @@ class Battleship {
 
   InitializeMyFleet() {
     this.myFleet = gameController.InitializeShips();
-    
 
     console.log(
       "------------------------------------------------------------------------",
