@@ -6,10 +6,15 @@ const beep = require("beepbeep");
 const position = require("./GameController/position.js");
 const letters = require("./GameController/letters.js");
 const { matchesGlob } = require("path");
+var MAX_ROW = 'H';
+var MAX_COL = 8;
+var MIN_ROW = 'A';
+var MIN_COL = 1;
 let telemetryWorker;
-let playGame = true;
+
 
 class Battleship {
+
   start() {
     telemetryWorker = new Worker("./TelemetryClient/telemetryClient.js");
 
@@ -85,11 +90,21 @@ class Battleship {
         `Player, it's your turn`,
         cliColor.green,
       );
-      Battleship.WriteConsoleColoredMessage(
-        `Enter coordinates for your shot :`,
-        cliColor.green,
-      );
-      var position = Battleship.ParsePosition(readline.question());
+      var position = null;
+      do {
+        
+        Battleship.WriteConsoleColoredMessage(
+          `Enter coordinates for your shot :`,
+          cliColor.green,
+        );
+        position = Battleship.ParsePosition(readline.question());
+        if (position === null) {
+          Battleship.WriteConsoleColoredMessage(
+            `Invalid coordinate`,
+            cliColor.green,
+          );
+        }
+      } while (position === null);
       var isHit = gameController.CheckIsHit(this.enemyFleet, position);
 
       telemetryWorker.postMessage({
@@ -155,8 +170,18 @@ class Battleship {
   }
 
   static ParsePosition(input) {
-    var letter = letters.get(input.toUpperCase().substring(0, 1));
+    var letter = input.toUpperCase().substring(0, 1);
+    if (!/^[a-zA-Z]$/.test(letter)) {
+      return null;
+    } //regex could include max row/col probably, but idk javascript and idc
     var number = parseInt(input.substring(1, 2), 10);
+    if (!/^\d$/.test(letter)) {
+      return null;
+    }
+    if (letter.charCodeAt(0) > MAX_ROW.charCodeAt(0) || letter.charCodeAt(0) < MIN_ROW.charCodeAt(0))
+    if (number > MAX_COL || number < MIN_COL) {
+      return null;
+    }
     return new position(letter, number);
   }
 
