@@ -1,3 +1,6 @@
+const cliColor = require("cli-color");
+const Battleship = require("../battleship.js");
+
 class GameController {
   static InitializeShips() {
     var colors = require("cli-color");
@@ -16,10 +19,16 @@ class GameController {
     if (shot == undefined) throw "The shooting position is not defined";
     if (ships == undefined) throw "No ships defined";
     var returnvalue = false;
+    var positionArrayIndex = 0;
     ships.forEach(function (ship) {
+      positionArrayIndex = 0;
       ship.positions.forEach((position) => {
-        if (position.row == shot.row && position.column == shot.column)
+        if (position.row == shot.row && position.column == shot.column) {
+          ship.positionsHit[positionArrayIndex] = true;
+          //console.log(`Ship ${ship.name} hit at ${position.column}${position.row} (position hit: ${positionArrayIndex})` );
           returnvalue = true;
+        }
+        positionArrayIndex++;
       });
     });
     return returnvalue;
