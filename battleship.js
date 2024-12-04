@@ -235,7 +235,6 @@ class Battleship {
     console.log(
       "------------------------------------------------------------------------",
     );
-    /*
     Battleship.WriteConsoleColoredMessage(
       "Please position your fleet (Game board size is from A to H and 1 to 8) :",
       cliColor.green,
@@ -263,7 +262,7 @@ class Battleship {
         });
         ship.addPosition(Battleship.ParsePosition(position));
       }
-    });*/
+    });
   }
 
   InitializeEnemyFleet() {
