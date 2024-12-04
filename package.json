@@ -48,7 +48,7 @@
   "nyc": {
     "all": true,
     "useSpawnWrap": true,
-    "include": ["GameController", "TelemetryClient"],  
+    "include": ["ai.js", "battleship.js", "GameController", "TelemetryClient"],  
     "exclude": []
   }
 }
