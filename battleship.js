@@ -218,8 +218,10 @@ class Battleship {
     let reply = "";
     do {
       console.log("Do you want to play again? (Y/N)");
-      const reply = readline.question();
-    } while (reply);
+      reply = readline.question();
+    } while (reply.toLowerCase() !== "y" && reply.toLowerCase() !== "n");
+
+    return answer.toUpperCase() === "Y" ? true : false;
   }
 }
 
