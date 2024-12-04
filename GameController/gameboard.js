@@ -8,9 +8,9 @@ class Gameboard {
 
     drawGameBoard() {
         let table = "";
-        for (let x = 1; x < this.columnSize; x++) {
+        for (let x = 1; x <= this.columnSize; x++) {
             let row = "";
-            for (let y = 1; y < this.rowSize; y++) {
+            for (let y = 1; y <= this.rowSize; y++) {
                 row += `${Letters.get(y)}${x}\t`;
             }
             table += row.trim() + "\n";
