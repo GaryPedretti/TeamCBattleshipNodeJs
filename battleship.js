@@ -75,12 +75,12 @@ class Battleship {
     console.log("   \\    \\_/");
     console.log('    """"');
 
-        do {
-            console.log();
-            console.log(cliColor.green("Player, it's your turn"));
-            console.log(cliColor.green("Enter coordinates for your shot :"));
-            var position = Battleship.ParsePosition(readline.question());
-            var isHit = gameController.CheckIsHit(this.enemyFleet, position);
+    do {
+      console.log();
+      console.log(cliColor.green("Player, it's your turn"));
+      console.log(cliColor.green("Enter coordinates for your shot :"));
+      var position = Battleship.ParsePosition(readline.question());
+      var isHit = gameController.CheckIsHit(this.enemyFleet, position);
 
       telemetryWorker.postMessage({
         eventName: "Player_ShootPosition",
@@ -90,20 +90,18 @@ class Battleship {
       if (isHit) {
         beep();
 
-                console.log("                \\         .  ./");
-                console.log("              \\      .:\";'.:..\"   /");
-                console.log("                  (M^^.^~~:.'\").");
-                console.log("            -   (/  .    . . \\ \\)  -");
-                console.log("               ((| :. ~ ^  :. .|))");
-                console.log("            -   (\\- |  \\ /  |  /)  -");
-                console.log("                 -\\  \\     /  /-");
-                console.log("                   \\  \\   /  /");
-                console.log(cliColor.red("Yeah! Nice hit!"));
-            }
-            else
-            {
-                console.log(cliColor.blue("Miss") );
-            }
+        console.log("                \\         .  ./");
+        console.log('              \\      .:";\'.:.."   /');
+        console.log("                  (M^^.^~~:.'\").");
+        console.log("            -   (/  .    . . \\ \\)  -");
+        console.log("               ((| :. ~ ^  :. .|))");
+        console.log("            -   (\\- |  \\ /  |  /)  -");
+        console.log("                 -\\  \\     /  /-");
+        console.log("                   \\  \\   /  /");
+        console.log(cliColor.red("Yeah! Nice hit!"));
+      } else {
+        console.log(cliColor.blue("Miss"));
+      }
 
       var computerPos = this.GetRandomPosition();
       var isHit = gameController.CheckIsHit(this.myFleet, computerPos);
@@ -113,19 +111,24 @@ class Battleship {
         properties: { Position: computerPos.toString(), IsHit: isHit },
       });
 
-            console.log();
-            
-            if( isHit )
-            {
-                console.log(cliColor.red(`Computer shot in ${computerPos.column}${computerPos.row} and has hit your ship!`));
-            }
-            else
-            {
-                console.log(cliColor.blue(`Computer shot in ${computerPos.column}${computerPos.row} and has missed!`));
-            }
+      console.log();
 
-            if (isHit) {
-                beep();
+      if (isHit) {
+        console.log(
+          cliColor.red(
+            `Computer shot in ${computerPos.column}${computerPos.row} and has hit your ship!`,
+          ),
+        );
+      } else {
+        console.log(
+          cliColor.blue(
+            `Computer shot in ${computerPos.column}${computerPos.row} and has missed!`,
+          ),
+        );
+      }
+
+      if (isHit) {
+        beep();
 
         console.log("                \\         .  ./");
         console.log('              \\      .:";\'.:.."   /');
@@ -163,17 +166,23 @@ class Battleship {
   InitializeMyFleet() {
     this.myFleet = gameController.InitializeShips();
 
-    console.log(cliColor.green(
-      "Please position your fleet (Game board size is from A to H and 1 to 8) :"),
+    console.log(
+      cliColor.green(
+        "Please position your fleet (Game board size is from A to H and 1 to 8) :",
+      ),
     );
 
     this.myFleet.forEach(function (ship) {
       console.log();
-      console.log(cliColor.green(
-        `Please enter the positions for the ${ship.name} (size: ${ship.size})`),
+      console.log(
+        cliColor.green(
+          `Please enter the positions for the ${ship.name} (size: ${ship.size})`,
+        ),
       );
       for (var i = 1; i < ship.size + 1; i++) {
-        console.log(cliColor.green(`Enter position ${i} of ${ship.size} (i.e A3):`));
+        console.log(
+          cliColor.green(`Enter position ${i} of ${ship.size} (i.e A3):`),
+        );
         const position = readline.question();
         telemetryWorker.postMessage({
           eventName: "Player_PlaceShipPosition",
