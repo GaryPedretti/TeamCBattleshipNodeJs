@@ -160,7 +160,7 @@ class Battleship {
         console.log("                   \\  \\   /  /");
       }
 
-      if (this.CheckForGameEnd()) {
+      if (Battleship.CheckForGameEnd( this.myFleet, this.enemyFleet )) {
         break;
       }
     } while (true);
@@ -170,9 +170,9 @@ class Battleship {
     console.log(color(str));
   }
 
-  CheckForGameEnd() {
+  static CheckForGameEnd( playerFleet, computerFleet ) {
     var fleetDestroyed = true;
-    this.myFleet.forEach(function (ship) {
+    playerFleet.forEach(function (ship) {
       if (!ship.checkDestroyed()) {
         fleetDestroyed = false;
       } else if (!ship.printedMessage) {
@@ -190,7 +190,7 @@ class Battleship {
     }
 
     var enemyDestroyed = true;
-    this.enemyFleet.forEach(function (ship) {
+    computerFleet.forEach(function (ship) {
       if (!ship.checkDestroyed()) {
         enemyDestroyed = false;
       } else if (!ship.printedMessage) {
