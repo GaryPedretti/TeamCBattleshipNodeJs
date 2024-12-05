@@ -235,7 +235,6 @@ class Battleship {
     this.myFleet = gameController.InitializeShips();
     this.gameboard = new gameboardController(letters.H.value, 8);
 
-
     console.log(
       "------------------------------------------------------------------------",
     );
