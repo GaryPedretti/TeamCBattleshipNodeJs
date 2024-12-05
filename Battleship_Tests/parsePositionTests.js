@@ -5,13 +5,13 @@ const position = require("../GameController/position.js");
 
 describe("parsePositionTests", function () {
   it("should return a valid position for valid input", function () {
-    var expected = new position(letters.B, 3);
+    var expected = new position("B", 3);
     var actual = battleship.ParsePosition("B3");
     assert.deepStrictEqual(actual, expected);
   });
 
   it("should return a valid position for valid input, lowercase", function () {
-    var expected = new position(letters.B, 3);
+    var expected = new position("B", 3);
     var actual = battleship.ParsePosition("b3");
     assert.deepStrictEqual(actual, expected);
   });
@@ -29,13 +29,13 @@ describe("parsePositionTests", function () {
   });
 
   it("should return null for if number is out of range", function () {
-    var expected = new position(letters.B, 3);
+    var expected = null;
     var actual = battleship.ParsePosition("B99");
     assert.deepStrictEqual(actual, expected);
   });
 
   it("should return null for if the 2nd and third characters are not a valid number", function () {
-    var expected = new position(letters.B, 3);
+    var expected = null;
     var actual = battleship.ParsePosition("Bzz");
     assert.deepStrictEqual(actual, expected);
   });
