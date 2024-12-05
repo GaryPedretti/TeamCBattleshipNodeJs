@@ -11,6 +11,7 @@ class Ship {
 
   addPosition(position) {
     this.positions.push(position);
+    this.positionsHit.push( false );
   }
 
   checkDestroyed() {

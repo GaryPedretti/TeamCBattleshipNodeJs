@@ -18,4 +18,16 @@ describe("shipHitPointsTests", function () {
 
     assert.deepStrictEqual(acShip.positionsHit[0], true);
   });
+
+  it("Ship should store the same amount of potential hits as it has positions, no more", function () {
+    var colors = require("cli-color");
+    var numberOfPositions = 1;
+    var aircraftCarrier = new Ship("Aircraft Carrier", numberOfPositions, colors.CadetBlue );
+    aircraftCarrier.addPosition(new position(letters.B, 3));
+
+    assert.deepStrictEqual( aircraftCarrier.positionsHit.length, numberOfPositions )
+  });
 });
+
+
+
