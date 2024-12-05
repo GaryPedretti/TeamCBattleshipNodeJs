@@ -160,7 +160,7 @@ class Battleship {
         console.log("                   \\  \\   /  /");
       }
 
-      if (this.CheckForGameEnd()) {
+      if (Battleship.CheckForGameEnd( this.myFleet, this.enemyFleet )) {
         break;
       }
     } while (true);
@@ -170,9 +170,9 @@ class Battleship {
     console.log(color(str));
   }
 
-  CheckForGameEnd() {
+  static CheckForGameEnd( playerFleet, computerFleet ) {
     var fleetDestroyed = true;
-    this.myFleet.forEach(function (ship) {
+    playerFleet.forEach(function (ship) {
       if (!ship.checkDestroyed()) {
         fleetDestroyed = false;
       } else if (!ship.printedMessage) {
@@ -190,7 +190,7 @@ class Battleship {
     }
 
     var enemyDestroyed = true;
-    this.enemyFleet.forEach(function (ship) {
+    computerFleet.forEach(function (ship) {
       if (!ship.checkDestroyed()) {
         enemyDestroyed = false;
       } else if (!ship.printedMessage) {
@@ -239,7 +239,7 @@ class Battleship {
     console.log(
       "------------------------------------------------------------------------",
     );
-    Battleship.WriteConsoleColoredMessage(
+    /*Battleship.WriteConsoleColoredMessage(
       "Please position your fleet (Game board size is from A to H and 1 to 8) :",
       cliColor.green,
     );
@@ -267,7 +267,7 @@ class Battleship {
         });
         ship.addPosition(Battleship.ParsePosition(position));
       }
-    });
+    });*/
   }
 
   InitializeEnemyFleet() {
@@ -275,7 +275,7 @@ class Battleship {
 
     this.enemyFleet[0].addPosition(new position(letters.B, 4));
     this.enemyFleet[0].addPosition(new position(letters.B, 5));
-    this.enemyFleet[0].addPosition(new position(letters.B, 6));
+    /*this.enemyFleet[0].addPosition(new position(letters.B, 6));
     this.enemyFleet[0].addPosition(new position(letters.B, 7));
     this.enemyFleet[0].addPosition(new position(letters.B, 8));
 
@@ -293,7 +293,7 @@ class Battleship {
     this.enemyFleet[3].addPosition(new position(letters.H, 8));
 
     this.enemyFleet[4].addPosition(new position(letters.C, 5));
-    this.enemyFleet[4].addPosition(new position(letters.C, 6));
+    this.enemyFleet[4].addPosition(new position(letters.C, 6));*/
   }
 
   playAgain() {
