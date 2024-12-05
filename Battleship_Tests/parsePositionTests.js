@@ -21,23 +21,22 @@ describe("parsePositionTests", function () {
     var actual = battleship.ParsePosition("b3");
     assert.deepStrictEqual(actual.toString(), expected);
   });
-  
+
   it("should return null for if letter is out of range", function () {
     var expected = null;
     var actual = battleship.ParsePosition("Z3");
     assert.deepStrictEqual(actual, expected);
   });
-  
+
   it("should return null for if number is out of range", function () {
     var expected = new position(letters.B, 3);
     var actual = battleship.ParsePosition("B99");
     assert.deepStrictEqual(actual, expected);
   });
-  
+
   it("should return null for if the 2nd and third characters are not a valid number", function () {
     var expected = new position(letters.B, 3);
     var actual = battleship.ParsePosition("Bzz");
     assert.deepStrictEqual(actual, expected);
   });
-  
 });
