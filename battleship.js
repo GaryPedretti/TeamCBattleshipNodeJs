@@ -174,11 +174,13 @@ class Battleship {
     if (!/^[a-zA-Z]$/.test(letter)) {
       return null;
     } //regex could include max row/col probably, but idk javascript and idc
-    var number = parseInt(input.substring(1, 2), 10);
-    if (!/^\d$/.test(letter)) {
+    var number = parseInt(input.substring(1, 3), 10);
+    if (isNaN(number)) {
       return null;
     }
-    if (letter.charCodeAt(0) > MAX_ROW.charCodeAt(0) || letter.charCodeAt(0) < MIN_ROW.charCodeAt(0))
+    if (letter.charCodeAt(0) > MAX_ROW.charCodeAt(0) || letter.charCodeAt(0) < MIN_ROW.charCodeAt(0)) {
+      return null;
+    }
     if (number > MAX_COL || number < MIN_COL) {
       return null;
     }
@@ -219,20 +221,39 @@ class Battleship {
         cliColor.green,
       );
       for (var i = 1; i < ship.size + 1; i++) {
-        Battleship.WriteConsoleColoredMessage(
-          `Enter position ${i} of ${ship.size} (i.e A3):`,
-          cliColor.green,
-        );
-        const position = readline.question();
+        var positionStr;
+        var position;
+        do {
+          Battleship.WriteConsoleColoredMessage(
+            `Enter position ${i} of ${ship.size} (i.e A3):`,
+            cliColor.green,
+          );
+          positionStr = readline.question();
+          telemetryWorker.postMessage({
+            eventName: "Player_PlaceShipPosition",
+            properties: {
+              Position: positionStr,
+              Ship: ship.name,
+              PositionInShip: i,
+            },
+          });
+          position = Battleship.ParsePosition(positionStr);
+          if (position === null) {
+            Battleship.WriteConsoleColoredMessage(
+              `Invalid coordinate`,
+              cliColor.green,
+            );
+          }
+        } while (position === null);
         telemetryWorker.postMessage({
           eventName: "Player_PlaceShipPosition",
           properties: {
-            Position: position,
+            Position: positionStr,
             Ship: ship.name,
             PositionInShip: i,
           },
         });
-        ship.addPosition(Battleship.ParsePosition(position));
+        ship.addPosition(position);
       }
     });
   }
