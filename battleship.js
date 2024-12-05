@@ -6,21 +6,16 @@ const beep = require("beepbeep");
 const position = require("./GameController/position.js");
 const letters = require("./GameController/letters.js");
 const { matchesGlob } = require("path");
-<<<<<<< HEAD
 var MAX_ROW = 'H';
 var MAX_COL = 8;
 var MIN_ROW = 'A';
 var MIN_COL = 1;
-let telemetryWorker;
-
-=======
 const Ship = require("./GameController/ship.js");
 const { exit } = require("process");
 const gameboardController = require("./GameController/gameboard.js");
 let telemetryWorker;
 let playGame = true;
 let gameboard;
->>>>>>> origin/master
 
 class Battleship {
 
