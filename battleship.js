@@ -6,9 +6,9 @@ const beep = require("beepbeep");
 const position = require("./GameController/position.js");
 const letters = require("./GameController/letters.js");
 const { matchesGlob } = require("path");
-var MAX_ROW = 'H';
+var MAX_ROW = "H";
 var MAX_COL = 8;
-var MIN_ROW = 'A';
+var MIN_ROW = "A";
 var MIN_COL = 1;
 const Ship = require("./GameController/ship.js");
 const { exit } = require("process");
@@ -18,7 +18,6 @@ let playGame = true;
 let gameboard;
 
 class Battleship {
-
   start() {
     telemetryWorker = new Worker("./TelemetryClient/telemetryClient.js");
 
@@ -101,7 +100,6 @@ class Battleship {
       );
       var position = null;
       do {
-        
         Battleship.WriteConsoleColoredMessage(
           `Enter coordinates for your shot (i.e A3):`,
           cliColor.green,
@@ -234,7 +232,10 @@ class Battleship {
     if (isNaN(number)) {
       return null;
     }
-    if (letter.charCodeAt(0) > MAX_ROW.charCodeAt(0) || letter.charCodeAt(0) < MIN_ROW.charCodeAt(0)) {
+    if (
+      letter.charCodeAt(0) > MAX_ROW.charCodeAt(0) ||
+      letter.charCodeAt(0) < MIN_ROW.charCodeAt(0)
+    ) {
       return null;
     }
     if (number > MAX_COL || number < MIN_COL) {
@@ -261,7 +262,6 @@ class Battleship {
   InitializeMyFleet() {
     this.myFleet = gameController.InitializeShips();
     this.gameboard = new gameboardController(letters.H.value, 8);
-
 
     console.log(
       "------------------------------------------------------------------------",
