@@ -6,12 +6,21 @@ const beep = require("beepbeep");
 const position = require("./GameController/position.js");
 const letters = require("./GameController/letters.js");
 const { matchesGlob } = require("path");
+<<<<<<< HEAD
 var MAX_ROW = 'H';
 var MAX_COL = 8;
 var MIN_ROW = 'A';
 var MIN_COL = 1;
 let telemetryWorker;
 
+=======
+const Ship = require("./GameController/ship.js");
+const { exit } = require("process");
+const gameboardController = require("./GameController/gameboard.js");
+let telemetryWorker;
+let playGame = true;
+let gameboard;
+>>>>>>> origin/master
 
 class Battleship {
 
@@ -69,6 +78,8 @@ class Battleship {
       this.InitializeGame();
       this.StartGame();
     } while (this.playAgain());
+
+    exit();
   }
 
   StartGame() {
@@ -86,6 +97,9 @@ class Battleship {
 
     do {
       console.log();
+      console.log(
+        "------------------------------------------------------------------------",
+      );
       Battleship.WriteConsoleColoredMessage(
         `Player, it's your turn`,
         cliColor.green,
@@ -94,7 +108,7 @@ class Battleship {
       do {
         
         Battleship.WriteConsoleColoredMessage(
-          `Enter coordinates for your shot :`,
+          `Enter coordinates for your shot (i.e A3):`,
           cliColor.green,
         );
         position = Battleship.ParsePosition(readline.question());
@@ -137,6 +151,9 @@ class Battleship {
       });
 
       console.log();
+      console.log(
+        "------------------------------------------------------------------------",
+      );
 
       if (isHit) {
         Battleship.WriteConsoleColoredMessage(
@@ -162,11 +179,55 @@ class Battleship {
         console.log("                 -\\  \\     /  /-");
         console.log("                   \\  \\   /  /");
       }
+
+      if (this.CheckForGameEnd()) {
+        break;
+      }
     } while (true);
   }
 
   static WriteConsoleColoredMessage(str, color) {
     console.log(color(str));
+  }
+
+  CheckForGameEnd() {
+    var fleetDestroyed = true;
+    this.myFleet.forEach(function (ship) {
+      if (!ship.checkDestroyed()) {
+        fleetDestroyed = false;
+      } else if (!ship.printedMessage) {
+        Battleship.WriteConsoleColoredMessage(
+          `Your ${ship.name} is destroyed!`,
+          cliColor.yellow,
+        );
+        ship.printedMessage = true;
+      }
+    });
+
+    if (fleetDestroyed) {
+      Battleship.WriteConsoleColoredMessage("You have lost!", cliColor.yellow);
+      return true;
+    }
+
+    var enemyDestroyed = true;
+    this.enemyFleet.forEach(function (ship) {
+      if (!ship.checkDestroyed()) {
+        enemyDestroyed = false;
+      } else if (!ship.printedMessage) {
+        Battleship.WriteConsoleColoredMessage(
+          `The enemies ${ship.name} is destroyed!`,
+          cliColor.yellow,
+        );
+        ship.printedMessage = true;
+      }
+    });
+
+    if (enemyDestroyed) {
+      Battleship.WriteConsoleColoredMessage("You have won!", cliColor.yellow);
+      return true;
+    }
+
+    return false;
   }
 
   static ParsePosition(input) {
@@ -204,7 +265,8 @@ class Battleship {
 
   InitializeMyFleet() {
     this.myFleet = gameController.InitializeShips();
-    
+    this.gameboard = new gameboardController(letters.H.value, 8);
+
 
     console.log(
       "------------------------------------------------------------------------",
@@ -213,6 +275,7 @@ class Battleship {
       "Please position your fleet (Game board size is from A to H and 1 to 8) :",
       cliColor.green,
     );
+    this.gameboard.drawGameBoard();
 
     this.myFleet.forEach(function (ship) {
       console.log();
@@ -294,7 +357,7 @@ class Battleship {
       reply = readline.question();
     } while (reply.toLowerCase() !== "y" && reply.toLowerCase() !== "n");
 
-    return answer.toUpperCase() === "Y" ? true : false;
+    return reply.toUpperCase() === "Y" ? true : false;
   }
 }
 
