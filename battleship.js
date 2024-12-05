@@ -239,7 +239,7 @@ class Battleship {
     console.log(
       "------------------------------------------------------------------------",
     );
-    /*Battleship.WriteConsoleColoredMessage(
+    Battleship.WriteConsoleColoredMessage(
       "Please position your fleet (Game board size is from A to H and 1 to 8) :",
       cliColor.green,
     );
@@ -267,7 +267,7 @@ class Battleship {
         });
         ship.addPosition(Battleship.ParsePosition(position));
       }
-    });*/
+    });
   }
 
   InitializeEnemyFleet() {
@@ -275,7 +275,7 @@ class Battleship {
 
     this.enemyFleet[0].addPosition(new position(letters.B, 4));
     this.enemyFleet[0].addPosition(new position(letters.B, 5));
-    /*this.enemyFleet[0].addPosition(new position(letters.B, 6));
+    this.enemyFleet[0].addPosition(new position(letters.B, 6));
     this.enemyFleet[0].addPosition(new position(letters.B, 7));
     this.enemyFleet[0].addPosition(new position(letters.B, 8));
 
@@ -293,7 +293,7 @@ class Battleship {
     this.enemyFleet[3].addPosition(new position(letters.H, 8));
 
     this.enemyFleet[4].addPosition(new position(letters.C, 5));
-    this.enemyFleet[4].addPosition(new position(letters.C, 6));*/
+    this.enemyFleet[4].addPosition(new position(letters.C, 6));
   }
 
   playAgain() {
