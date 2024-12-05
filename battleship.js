@@ -6,10 +6,6 @@ const beep = require("beepbeep");
 const position = require("./GameController/position.js");
 const letters = require("./GameController/letters.js");
 const { matchesGlob } = require("path");
-var MAX_ROW = "H";
-var MAX_COL = 8;
-var MIN_ROW = "A";
-var MIN_COL = 1;
 const Ship = require("./GameController/ship.js");
 const { exit } = require("process");
 const gameboardController = require("./GameController/gameboard.js");
@@ -98,20 +94,11 @@ class Battleship {
         `Player, it's your turn`,
         cliColor.green,
       );
-      var position = null;
-      do {
-        Battleship.WriteConsoleColoredMessage(
-          `Enter coordinates for your shot (i.e A3):`,
-          cliColor.green,
-        );
-        position = Battleship.ParsePosition(readline.question());
-        if (position === null) {
-          Battleship.WriteConsoleColoredMessage(
-            `Invalid coordinate`,
-            cliColor.green,
-          );
-        }
-      } while (position === null);
+      Battleship.WriteConsoleColoredMessage(
+        `Enter coordinates for your shot (i.e A3):`,
+        cliColor.green,
+      );
+      var position = Battleship.ParsePosition(readline.question());
       var isHit = gameController.CheckIsHit(this.enemyFleet, position);
 
       telemetryWorker.postMessage({
@@ -224,23 +211,8 @@ class Battleship {
   }
 
   static ParsePosition(input) {
-    var letter = input.toUpperCase().substring(0, 1);
-    if (!/^[a-zA-Z]$/.test(letter)) {
-      return null;
-    } //regex could include max row/col probably, but idk javascript and idc
-    var number = parseInt(input.substring(1, 3), 10);
-    if (isNaN(number)) {
-      return null;
-    }
-    if (
-      letter.charCodeAt(0) > MAX_ROW.charCodeAt(0) ||
-      letter.charCodeAt(0) < MIN_ROW.charCodeAt(0)
-    ) {
-      return null;
-    }
-    if (number > MAX_COL || number < MIN_COL) {
-      return null;
-    }
+    var letter = letters.get(input.toUpperCase().substring(0, 1));
+    var number = parseInt(input.substring(1, 2), 10);
     return new position(letter, number);
   }
 
@@ -263,6 +235,7 @@ class Battleship {
     this.myFleet = gameController.InitializeShips();
     this.gameboard = new gameboardController(letters.H.value, 8);
 
+
     console.log(
       "------------------------------------------------------------------------",
     );
@@ -279,39 +252,20 @@ class Battleship {
         cliColor.green,
       );
       for (var i = 1; i < ship.size + 1; i++) {
-        var positionStr;
-        var position;
-        do {
-          Battleship.WriteConsoleColoredMessage(
-            `Enter position ${i} of ${ship.size} (i.e A3):`,
-            cliColor.green,
-          );
-          positionStr = readline.question();
-          telemetryWorker.postMessage({
-            eventName: "Player_PlaceShipPosition",
-            properties: {
-              Position: positionStr,
-              Ship: ship.name,
-              PositionInShip: i,
-            },
-          });
-          position = Battleship.ParsePosition(positionStr);
-          if (position === null) {
-            Battleship.WriteConsoleColoredMessage(
-              `Invalid coordinate`,
-              cliColor.green,
-            );
-          }
-        } while (position === null);
+        Battleship.WriteConsoleColoredMessage(
+          `Enter position ${i} of ${ship.size} (i.e A3):`,
+          cliColor.green,
+        );
+        const position = readline.question();
         telemetryWorker.postMessage({
           eventName: "Player_PlaceShipPosition",
           properties: {
-            Position: positionStr,
+            Position: position,
             Ship: ship.name,
             PositionInShip: i,
           },
         });
-        ship.addPosition(position);
+        ship.addPosition(Battleship.ParsePosition(position));
       }
     });
   }
