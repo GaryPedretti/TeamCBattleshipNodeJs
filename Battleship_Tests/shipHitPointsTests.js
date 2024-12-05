@@ -122,6 +122,78 @@ describe("shipHitPointsTests", function () {
     assert.equal( battleship.CheckForGameEnd( myFleet, enemyFleet ), true );
 
   });
+
+  it("The game should not end if only some of my fleet is destroyed", function () {
+    var colors = require("cli-color");
+    var ship1 = new Ship("Test Ship", 2, colors.black );
+    var ship2 = new Ship("Test Ship", 3, colors.black );
+
+    var positionA1 = new Position( letters.A, 1 );
+    var positionA2 = new Position( letters.A, 2 );
+
+    ship1.addPosition( positionA1 );
+    ship1.addPosition( positionA2 );
+
+    var positionB1 = new Position( letters.B, 1 );
+    var positionB2 = new Position( letters.B, 2 );
+    var positionB3 = new Position( letters.B, 3 );
+
+    ship2.addPosition( positionB1 );
+    ship2.addPosition( positionB2 );
+    ship2.addPosition( positionB3 );
+
+    var enemyFleet = [ ship1, ship2 ];
+    var myFleet = [ ship1, ship2 ];
+
+    gameController.CheckIsHit( myFleet, positionA1 );
+    gameController.CheckIsHit( myFleet, positionA2 );
+
+    assert.equal( battleship.CheckForGameEnd( myFleet, enemyFleet ), false );
+
+  });
+
+  it("The game should be lost once my fleet has been destroyed", function () {
+    var colors = require("cli-color");
+    var enemyShip1 = new Ship("Enemy Test Ship 1", 2, colors.black );
+    var enemyShip2 = new Ship("Enemy Test Ship 2", 3, colors.black );
+
+    var myShip1 = new Ship("My Test Ship 1", 2, colors.black );
+    var myShip2 = new Ship("My Test Ship 2", 3, colors.black );
+
+    var positionA1 = new Position( letters.A, 1 );
+    var positionA2 = new Position( letters.A, 2 );
+
+    enemyShip1.addPosition( positionA1 );
+    enemyShip1.addPosition( positionA2 );
+
+    myShip1.addPosition( positionA1 );
+    myShip1.addPosition( positionA2 );
+
+    var positionB1 = new Position( letters.B, 1 );
+    var positionB2 = new Position( letters.B, 2 );
+    var positionB3 = new Position( letters.B, 3 );
+
+    enemyShip2.addPosition( positionB1 );
+    enemyShip2.addPosition( positionB2 );
+    enemyShip2.addPosition( positionB3 );
+
+    myShip2.addPosition( positionB1 );
+    myShip2.addPosition( positionB2 );
+    myShip2.addPosition( positionB3 );
+
+    var enemyFleet = [ enemyShip1, enemyShip2 ];
+    var myFleet = [ myShip1, myShip2 ];
+
+    gameController.CheckIsHit( myFleet, positionA1 );
+    gameController.CheckIsHit( myFleet, positionA2 );
+
+    gameController.CheckIsHit( myFleet, positionB1 );
+    gameController.CheckIsHit( myFleet, positionB2 );
+    gameController.CheckIsHit( myFleet, positionB3 );
+
+    assert.equal( battleship.CheckForGameEnd( myFleet, enemyFleet ), true );
+
+  });
 });
 
 
