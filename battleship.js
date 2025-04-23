@@ -25,7 +25,7 @@ class Battleship {
         console.log(cliColor.magenta("                    +---------------___[}-_===_.'____                 /\\"));
         console.log(cliColor.magenta("                ____`-' ||___-{]_| _[}-  |     |_[___\\==--            \\/   _"));
         console.log(cliColor.magenta(" __..._____--==/___]_|__|_____________________________[___\\==--____,------' .7"));
-        console.log(cliColor.magenta("|                        Welcome to Battleship                         BB-61/"));
+        console.log(cliColor.magenta("|                        Welcome to Battleship             USS IOWA     BB-61/"));
         console.log(cliColor.magenta(" \\_________________________________________________________________________|"));
         console.log();
 
