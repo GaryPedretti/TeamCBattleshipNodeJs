@@ -56,21 +56,17 @@ class Battleship {
             telemetryWorker.postMessage({eventName: 'Player_ShootPosition', properties:  {Position: position.toString(), IsHit: isHit}});
 
             if (isHit) {
+                console.log(cliColor.redBright("Yeah ! Nice hit !"));
                 beep();
 
-                console.log("                \\         .  ./");
-                console.log("              \\      .:\";'.:..\"   /");
-                console.log("                  (M^^.^~~:.'\").");
-                console.log("            -   (/  .    . . \\ \\)  -");
-                console.log("               ((| :. ~ ^  :. .|))");
-                console.log("            -   (\\- |  \\ /  |  /)  -");
-                console.log("                 -\\  \\     /  /-");
-                console.log("                   \\  \\   /  /");
-            }
-
-            //console.log(isHit ? "Yeah ! Nice hit !" : "Miss");
-            if (isHit) {
-                console.log(cliColor.orange("Yeah ! Nice hit !"));
+                console.log(cliColor.redBright("                \\         .  ./"));
+                console.log(cliColor.redBright("              \\      .:\";'.:..\"   /"));
+                console.log(cliColor.redBright("                  (M^^.^~~:.'\")."));
+                console.log(cliColor.redBright("            -   (/  .    . . \\ \\)  -"));
+                console.log(cliColor.redBright("               ((| :. ~ ^  :. .|))"));
+                console.log(cliColor.redBright("            -   (\\- |  \\ /  |  /)  -"));
+                console.log(cliColor.redBright("                 -\\  \\     /  /-"));
+                console.log(cliColor.redBright("                   \\  \\   /  /"));
             }
             else {
                 console.log(cliColor.blue("You Missed!"));
@@ -86,21 +82,19 @@ class Battleship {
             // console.log(`Computer shot in ${computerPos.column}${computerPos.row} and ` + (isHit ? `has hit your ship !` : `miss`));
             if (isHit) {
                 console.log(cliColor.yellow("Oh no, your ship was hit!"));
+                beep();
+
+                console.log(cliColor.yellow("                \\         .  ./"));
+                console.log(cliColor.yellow("              \\      .:\";'.:..\"   /"));
+                console.log(cliColor.yellow("                  (M^^.^~~:.'\")."));
+                console.log(cliColor.yellow("            -   (/  .    . . \\ \\)  -"));
+                console.log(cliColor.yellow("               ((| :. ~ ^  :. .|))"));
+                console.log(cliColor.yellow("            -   (\\- |  \\ /  |  /)  -"));
+                console.log(cliColor.yellow("                 -\\  \\     /  /-"));
+                console.log(cliColor.yellow("                   \\  \\   /  /"));
             }
             else {
                 console.log(cliColor.blue("Computer Missed!"));
-            }
-            if (isHit) {
-                beep();
-
-                console.log("                \\         .  ./");
-                console.log("              \\      .:\";'.:..\"   /");
-                console.log("                  (M^^.^~~:.'\").");
-                console.log("            -   (/  .    . . \\ \\)  -");
-                console.log("               ((| :. ~ ^  :. .|))");
-                console.log("            -   (\\- |  \\ /  |  /)  -");
-                console.log("                 -\\  \\     /  /-");
-                console.log("                   \\  \\   /  /");
             }
         }
         while (true);
