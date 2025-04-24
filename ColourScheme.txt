@@ -1,0 +1,8 @@
+- Updated color scheme:
+	- Notifications = White
+	- User Misses = Blue
+	- User Hits = redBright
+	- User Sinks = Green
+	- Computer Misses = Blue
+	- Computer Hits = Yellow
+	- Computer Sinks = Red
