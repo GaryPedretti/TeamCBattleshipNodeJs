@@ -33,6 +33,14 @@ class Battleship {
         this.StartGame();
     }
 
+    AlertHit(player, hitShip) {
+        if (hitShip.sunk) {
+            console.log(player + " " + hitShip.getSunkMessage());
+        } else {
+            console.log(player + " " + hitShip.getHitButNotSunkMessage());
+        }
+    }
+
     StartGame() {
         console.clear();
         console.log("                  __");
@@ -52,7 +60,9 @@ class Battleship {
             console.log("Player, it's your turn");
             console.log("Enter coordinates for your shot :");
             var position = Battleship.ParsePosition(readline.question());
-            var isHit = gameController.CheckIsHit(this.enemyFleet, position);
+            var hitTuple = gameController.CheckIsHit(this.enemyFleet, position);
+            var isHit = hitTuple[0];
+            var hitShip = hitTuple[1];
 
             telemetryWorker.postMessage({eventName: 'Player_ShootPosition', properties:  {Position: position.toString(), IsHit: isHit}});
 
@@ -70,6 +80,7 @@ class Battleship {
             }
 
             console.log(isHit ? "Yeah ! Nice hit !" : "Miss");
+            this.AlertHit("Enemies", hitShip);
             console.log("======================================");
             var computerPos = this.GetRandomPosition();
             var isHit = gameController.CheckIsHit(this.myFleet, computerPos);
@@ -89,6 +100,8 @@ class Battleship {
                 console.log("            -   (\\- |  \\ /  |  /)  -");
                 console.log("                 -\\  \\     /  /-");
                 console.log("                   \\  \\   /  /");
+
+                this.AlertHit("Your", hitShip);
             }
         }
         while (true);

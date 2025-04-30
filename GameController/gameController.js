@@ -17,7 +17,7 @@ class GameController {
             throw "The shooting position is not defined";
         if (ships == undefined)
             throw "No ships defined";
-        var returnvalue = false;
+        var returnvalue = [false, null];
         ships.forEach(function (ship) {
             ship.positions.forEach(position => {
                 if (position.row == shot.row && position.column == shot.column)
@@ -25,7 +25,7 @@ class GameController {
                     returnvalue = [true, ship];
             });
         });
-        return [returnvalue, null];
+        return returnvalue;
     }
 
     static isShipValid(ship) {
