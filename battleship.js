@@ -5,6 +5,7 @@ const cliColor = require('cli-color');
 const beep = require('beepbeep');
 const position = require("./GameController/position.js");
 const letters = require("./GameController/letters.js");
+const GameController = require('./GameController/gameController.js');
 let telemetryWorker;
 
 class Battleship {
@@ -46,6 +47,8 @@ class Battleship {
         console.log("   \\    \\_/");
         console.log("    \"\"\"\"");
 
+        var FleetSunkMyFleet = false;
+        var FleetSunkEnemyFleet = false;
         do {
             console.log();
             console.log("Player, it's your turn");
@@ -89,8 +92,21 @@ class Battleship {
                 console.log("                 -\\  \\     /  /-");
                 console.log("                   \\  \\   /  /");
             }
+            FleetSunkMyFleet = GameController.CheckForFleetSunk(this.myFleet);
+            FleetSunkEnemyFleet = GameController.CheckForFleetSunk(this.enemyFleet);
         }
-        while (true);
+        while (!FleetSunkEnemyFleet && !FleetSunkMyFleet);
+
+        console.log("");
+        console.log("Game Over");
+        if (FleetSunkEnemyFleet)
+        {
+            console.log("Enemy Fleet Sunk");
+        }
+        else
+        {
+            console.log("My Fleet Sunk");
+        }
     }
 
     static ParsePosition(input) {
