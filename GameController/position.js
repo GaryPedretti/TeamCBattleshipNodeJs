@@ -7,7 +7,6 @@ class Position {
     toString() {
         return this.column.toString() + this.row.toString()
     }
-
 }
 
 module.exports = Position;
