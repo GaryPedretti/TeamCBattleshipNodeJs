@@ -62,7 +62,24 @@ class Battleship {
             console.log("======================================");
             console.log("Player, it's your turn");
             console.log("Enter coordinates for your shot :");
-            var position = Battleship.ParsePosition(readline.question());
+            let valid = false;
+            var position_string;
+            while (!valid)
+            {
+              position_string = readline.question();
+              var num = parseInt(position_string.substring(1, 3), 10);
+              console.log(num);
+              if ((position_string.substring(0, 1) >= 'A') && (position_string.substring(0, 1) <= 'H') && 
+                  (num >= '1') && (num <= '8'))
+              {
+                 valid = true;
+              }
+              else
+              {
+                console.log("Shot was outside of playing field. Repeat shot.");
+              }
+            }
+            var position = Battleship.ParsePosition(position_string);
             var hitTuple = gameController.CheckIsHit(this.enemyFleet, position);
             var isHit = hitTuple[0];
             var hitShip = hitTuple[1];
