@@ -174,6 +174,7 @@ class Battleship {
             this.myFleet.forEach(function (ship) {
                 console.log();
                 console.log(`Please enter the positions for the ${ship.name} (size: ${ship.size})`);
+                // call add board
                 for (var i = 1; i < ship.size + 1; i++) {
                         console.log(`Enter position ${i} of ${ship.size} (i.e A3):`);
                         const position = readline.question();
