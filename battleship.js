@@ -34,6 +34,14 @@ class Battleship {
         this.StartGame();
     }
 
+    AlertHit(player, hitShip) {
+        if (hitShip.sunk) {
+            console.log(player + " " + hitShip.getSunkMessage());
+        } else {
+            console.log(player + " " + hitShip.getHitButNotSunkMessage());
+        }
+    }
+
     StartGame() {
         console.clear();
         console.log("                  __");
@@ -55,7 +63,9 @@ class Battleship {
             console.log("Player, it's your turn");
             console.log("Enter coordinates for your shot :");
             var position = Battleship.ParsePosition(readline.question());
-            var isHit = gameController.CheckIsHit(this.enemyFleet, position);
+            var hitTuple = gameController.CheckIsHit(this.enemyFleet, position);
+            var isHit = hitTuple[0];
+            var hitShip = hitTuple[1];
 
             telemetryWorker.postMessage({eventName: 'Player_ShootPosition', properties:  {Position: position.toString(), IsHit: isHit}});
 
@@ -72,7 +82,8 @@ class Battleship {
                 console.log(cliColor.red("                   \\  \\   /  /"));
             }
 
-            console.log(isHit ? cliColor.red("Yeah ! Nice hit !") : cliColor.blue("Miss"));
+            console.log(isHit ? "Yeah ! Nice hit !" : "Miss");
+            this.AlertHit("Enemies", hitShip);
             console.log("======================================");
             var computerPos = this.GetRandomPosition();
             var isHit = gameController.CheckIsHit(this.myFleet, computerPos);
@@ -84,14 +95,16 @@ class Battleship {
             if (isHit) {
                 beep();
 
-                console.log(cliColor.red("                \\         .  ./"));
-                console.log(cliColor.red("              \\      .:\";'.:..\"   /"));
-                console.log(cliColor.red("                  (M^^.^~~:.'\")."));
-                console.log(cliColor.red("            -   (/  .    . . \\ \\)  -"));
-                console.log(cliColor.red("               ((| :. ~ ^  :. .|))"));
-                console.log(cliColor.red("            -   (\\- |  \\ /  |  /)  -"));
-                console.log(cliColor.red("                 -\\  \\     /  /-"));
-                console.log(cliColor.red("                   \\  \\   /  /"));
+                console.log("                \\         .  ./");
+                console.log("              \\      .:\";'.:..\"   /");
+                console.log("                  (M^^.^~~:.'\").");
+                console.log("            -   (/  .    . . \\ \\)  -");
+                console.log("               ((| :. ~ ^  :. .|))");
+                console.log("            -   (\\- |  \\ /  |  /)  -");
+                console.log("                 -\\  \\     /  /-");
+                console.log("                   \\  \\   /  /");
+
+                this.AlertHit("Your", hitShip);
             }
             FleetSunkMyFleet = GameController.CheckForFleetSunk(this.myFleet);
             FleetSunkEnemyFleet = GameController.CheckForFleetSunk(this.enemyFleet);

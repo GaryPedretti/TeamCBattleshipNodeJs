@@ -17,11 +17,12 @@ class GameController {
             throw "The shooting position is not defined";
         if (ships == undefined)
             throw "No ships defined";
-        var returnvalue = false;
+        var returnvalue = [false, null];
         ships.forEach(function (ship) {
             ship.positions.forEach(position => {
                 if (position.row == shot.row && position.column == shot.column)
-                    returnvalue = true;
+                    ship.logHit();
+                    returnvalue = [true, ship];
             });
         });
         return returnvalue;
