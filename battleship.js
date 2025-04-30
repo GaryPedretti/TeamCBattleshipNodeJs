@@ -146,19 +146,42 @@ class Battleship {
 
     InitializeMyFleet() {
         this.myFleet = gameController.InitializeShips();
+        console.log("Do you want default set up (1= Yes):");
+        const default_setup = readline.question() == 1 ? true : false;
 
-        console.log("Please position your fleet (Game board size is from A to H and 1 to 8) :");
+        if(default_setup) {
+            this.myFleet[0].addPosition(new position(letters.A, 1));
+            this.myFleet[0].addPosition(new position(letters.A, 2));
+            this.myFleet[0].addPosition(new position(letters.A, 3));
+            this.myFleet[0].addPosition(new position(letters.A, 4));
+            this.myFleet[0].addPosition(new position(letters.A, 5));
+            this.myFleet[1].addPosition(new position(letters.B, 1));
+            this.myFleet[1].addPosition(new position(letters.B, 2));
+            this.myFleet[1].addPosition(new position(letters.B, 3));
+            this.myFleet[1].addPosition(new position(letters.B, 4));
+            this.myFleet[2].addPosition(new position(letters.C, 1));
+            this.myFleet[2].addPosition(new position(letters.C, 2));
+            this.myFleet[2].addPosition(new position(letters.C, 3));
+            this.myFleet[3].addPosition(new position(letters.D, 1));
+            this.myFleet[3].addPosition(new position(letters.D, 2));
+            this.myFleet[3].addPosition(new position(letters.D, 3));
+            this.myFleet[4].addPosition(new position(letters.E, 1));
+            this.myFleet[4].addPosition(new position(letters.E, 2));
 
-        this.myFleet.forEach(function (ship) {
-            console.log();
-            console.log(`Please enter the positions for the ${ship.name} (size: ${ship.size})`);
-            for (var i = 1; i < ship.size + 1; i++) {
-                    console.log(`Enter position ${i} of ${ship.size} (i.e A3):`);
-                    const position = readline.question();
-                    telemetryWorker.postMessage({eventName: 'Player_PlaceShipPosition', properties:  {Position: position, Ship: ship.name, PositionInShip: i}});
-                    ship.addPosition(Battleship.ParsePosition(position));
-            }
-        })
+        } else {
+            console.log("Please position your fleet (Game board size is from A to H and 1 to 8) :");
+
+            this.myFleet.forEach(function (ship) {
+                console.log();
+                console.log(`Please enter the positions for the ${ship.name} (size: ${ship.size})`);
+                for (var i = 1; i < ship.size + 1; i++) {
+                        console.log(`Enter position ${i} of ${ship.size} (i.e A3):`);
+                        const position = readline.question();
+                        telemetryWorker.postMessage({eventName: 'Player_PlaceShipPosition', properties:  {Position: position, Ship: ship.name, PositionInShip: i}});
+                        ship.addPosition(Battleship.ParsePosition(position));
+                }
+            })
+        }
     }
 
     InitializeEnemyFleet() {
