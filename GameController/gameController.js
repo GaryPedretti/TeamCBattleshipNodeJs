@@ -1,7 +1,8 @@
 class GameController {
     static InitializeShips() {
         var colors = require("cli-color");
-        
+        var playerOne = require("./board.js");
+        var playerTwo = require("./board.js");
         const Ship = require("./ship.js");
         var ships = [
             new Ship("Aircraft Carrier", 5, colors.CadetBlue),
