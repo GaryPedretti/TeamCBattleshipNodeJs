@@ -32,7 +32,14 @@ class GameController {
     }
     static CheckForFleetSunk(ships)
     {
-        return false;
+        var shipssunk = true;
+        ships.forEach(function(ship){
+            if (!ship.sunk)
+            {
+                shipssunk = false;
+            }
+        });
+        return shipssunk;
     }
 }
 
