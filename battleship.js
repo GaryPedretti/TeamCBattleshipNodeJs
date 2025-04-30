@@ -67,14 +67,16 @@ class Battleship {
             while (!valid)
             {
               position_string = readline.question();
+              var num = parseInt(position_string.substring(1, 3), 10);
+              console.log(num);
               if ((position_string.substring(0, 1) >= 'A') && (position_string.substring(0, 1) <= 'H') && 
-                  (position_string.substring(1, 2) >= '1') && (position_string.substring(1, 2) <= '8'))
+                  (num >= '1') && (num <= '8'))
               {
                  valid = true;
               }
               else
               {
-                console.log("Show was outside of playing field. Repeat shot.");
+                console.log("Shot was outside of playing field. Repeat shot.");
               }
             }
             var position = Battleship.ParsePosition(position_string);
