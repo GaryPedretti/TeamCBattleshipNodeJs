@@ -68,7 +68,6 @@ class Battleship {
             {
               position_string = readline.question();
               var num = parseInt(position_string.substring(1, 3), 10);
-              console.log(num);
               if ((position_string.substring(0, 1) >= 'A') && (position_string.substring(0, 1) <= 'H') && 
                   (num >= '1') && (num <= '8'))
               {
