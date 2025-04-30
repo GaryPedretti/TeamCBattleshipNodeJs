@@ -5,6 +5,7 @@ const cliColor = require('cli-color');
 const beep = require('beepbeep');
 const position = require("./GameController/position.js");
 const letters = require("./GameController/letters.js");
+const GameController = require('./GameController/gameController.js');
 let telemetryWorker;
 
 class Battleship {
@@ -54,6 +55,8 @@ class Battleship {
         console.log("   \\    \\_/");
         console.log("    \"\"\"\"");
 
+        var FleetSunkMyFleet = false;
+        var FleetSunkEnemyFleet = false;
         do {
             console.log();
             console.log("======================================");
@@ -69,14 +72,14 @@ class Battleship {
             if (isHit) {
                 beep();
 
-                console.log("                \\         .  ./");
-                console.log("              \\      .:\";'.:..\"   /");
-                console.log("                  (M^^.^~~:.'\").");
-                console.log("            -   (/  .    . . \\ \\)  -");
-                console.log("               ((| :. ~ ^  :. .|))");
-                console.log("            -   (\\- |  \\ /  |  /)  -");
-                console.log("                 -\\  \\     /  /-");
-                console.log("                   \\  \\   /  /");
+                console.log(cliColor.red("                \\         .  ./"));
+                console.log(cliColor.red("              \\      .:\";'.:..\"   /"));
+                console.log(cliColor.red("                  (M^^.^~~:.'\")."));
+                console.log(cliColor.red("            -   (/  .    . . \\ \\)  -"));
+                console.log(cliColor.red("               ((| :. ~ ^  :. .|))"));
+                console.log(cliColor.red("            -   (\\- |  \\ /  |  /)  -"));
+                console.log(cliColor.red("                 -\\  \\     /  /-"));
+                console.log(cliColor.red("                   \\  \\   /  /"));
             }
 
             console.log(isHit ? "Yeah ! Nice hit !" : "Miss");
@@ -88,7 +91,7 @@ class Battleship {
             telemetryWorker.postMessage({eventName: 'Computer_ShootPosition', properties:  {Position: computerPos.toString(), IsHit: isHit}});
 
             console.log();
-            console.log(`Computer shot in ${computerPos.column}${computerPos.row} and ` + (isHit ? `has hit your ship !` : `miss`));
+            console.log(`Computer shot in ${computerPos.column}${computerPos.row} and ` + (isHit ? cliColor.red(`has hit your ship !`) : cliColor.blue(`miss`)));
             if (isHit) {
                 beep();
 
@@ -103,8 +106,21 @@ class Battleship {
 
                 this.AlertHit("Your", hitShip);
             }
+            FleetSunkMyFleet = GameController.CheckForFleetSunk(this.myFleet);
+            FleetSunkEnemyFleet = GameController.CheckForFleetSunk(this.enemyFleet);
         }
-        while (true);
+        while (!FleetSunkEnemyFleet && !FleetSunkMyFleet);
+
+        console.log("");
+        console.log("Game Over");
+        if (FleetSunkEnemyFleet)
+        {
+            console.log("Enemy Fleet Sunk");
+        }
+        else
+        {
+            console.log("My Fleet Sunk");
+        }
     }
 
     static ParsePosition(input) {
