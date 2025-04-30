@@ -13,10 +13,10 @@ class Board {
     shipOutofBounds(ship) {
         // Check if there is position out of bounds
         for (let element of ship.positions) {
-            if(element.column > this.width || element.column < 0){
+            if(element.column > this.width || element.column < 1){
                 return true;
             }
-            if(element.row > this.height || element.row < 0) {
+            if(element.row > this.height || element.row < 1) {
                 return true;
             }
         }
