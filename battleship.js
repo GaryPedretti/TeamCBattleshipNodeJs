@@ -51,6 +51,7 @@ class Battleship {
         var FleetSunkEnemyFleet = false;
         do {
             console.log();
+            console.log("======================================");
             console.log("Player, it's your turn");
             console.log("Enter coordinates for your shot :");
             var position = Battleship.ParsePosition(readline.question());
@@ -72,7 +73,7 @@ class Battleship {
             }
 
             console.log(isHit ? cliColor.red("Yeah ! Nice hit !") : cliColor.blue("Miss"));
-
+            console.log("======================================");
             var computerPos = this.GetRandomPosition();
             var isHit = gameController.CheckIsHit(this.myFleet, computerPos);
 
