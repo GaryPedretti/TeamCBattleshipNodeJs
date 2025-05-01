@@ -8,7 +8,7 @@ class Board {
     }
 
     mergeArrays(ship) {
-        return this.shipPositions.concat(ship.positions);
+        this.shipPositions = this.shipPositions.concat(ship.positions);
     }
     
     shipOutofBounds(ship) {
@@ -27,8 +27,11 @@ class Board {
     shipNotInConflict(ship){
         // Check if there is any common element
         for (let element of ship.positions) {
-            if (this.shipPositions.includes(element)) {
-                return false;
+            //console.log(element)
+            for(let position of this.shipPositions){
+                if (element.column == position.column && element.row == position.row) {
+                    return false;
+                }
             }
         }
         return true;
@@ -47,12 +50,14 @@ class Board {
         var wasAdded = [false, ship];
         ship = this.expandPosition(ship, position);
         if(this.shipOutofBounds(ship)) {
+            ship.positions = [];
             return wasAdded;
         }
         if(this.shipNotInConflict(ship)) {
             this.mergeArrays(ship);
             wasAdded[0] = true;
         }
+        ship.positions = [];
         return wasAdded;
     }
 }
