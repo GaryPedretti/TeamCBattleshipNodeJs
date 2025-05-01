@@ -105,10 +105,15 @@ class Battleship {
             }
 
             console.log(isHit ? cliColor.red("Yeah ! Nice hit !") : cliColor.blue("Miss"));
-            this.AlertHit("Enemies", hitShip);
+            if (isHit) {
+                this.AlertHit("Enemies", hitShip);
+            }
             console.log("======================================");
             var computerPos = this.GetRandomPosition();
-            var isHit = gameController.CheckIsHit(this.myFleet, computerPos);
+            //var isHit = gameController.CheckIsHit(this.myFleet, computerPos);
+            var hitTuple = gameController.CheckIsHit(this.myFleet, computerPos);
+            var isHit = hitTuple[0];
+            var hitShip = hitTuple[1];
 
             telemetryWorker.postMessage({eventName: 'Computer_ShootPosition', properties:  {Position: computerPos.toString(), IsHit: isHit}});
 
