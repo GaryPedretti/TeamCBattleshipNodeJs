@@ -68,7 +68,8 @@ class Battleship {
             {
               position_string = readline.question();
               var num = parseInt(position_string.substring(1, 3), 10);
-              if ((position_string.substring(0, 1) >= 'A') && (position_string.substring(0, 1) <= 'H') && 
+              if ((position_string.substring(0, 1).toUpperCase() >= 'A') && 
+                  (position_string.substring(0, 1).toUpperCase() <= 'H') && 
                   (num >= '1') && (num <= '8'))
               {
                  valid = true;
