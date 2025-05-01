@@ -144,6 +144,18 @@ class Battleship {
         this.InitializeEnemyFleet();
     }
 
+    static AskPosition(ship, myBoard){
+        console.log();
+        console.log(`Please enter the positions for the ${ship.name} (size: ${ship.size})`);
+        const position = readline.question();
+        var parsedPosition = Battleship.ParsePosition(position);
+        var response = myBoard.addShip(ship, parsedPosition);
+        if(!response[0]){
+            Battleship.AskPosition(ship, myBoard);
+        }
+        return response[1];
+    }
+
     InitializeMyFleet() {
         this.myFleet = gameController.InitializeShips();
         console.log("Do you want default set up (1= Yes):");
@@ -172,15 +184,20 @@ class Battleship {
             console.log("Please position your fleet (Game board size is from A to H and 1 to 8) :");
 
             this.myFleet.forEach(function (ship) {
-                console.log();
-                console.log(`Please enter the positions for the ${ship.name} (size: ${ship.size})`);
                 // call add board
-                for (var i = 1; i < ship.size + 1; i++) {
-                        console.log(`Enter position ${i} of ${ship.size} (i.e A3):`);
-                        const position = readline.question();
-                        telemetryWorker.postMessage({eventName: 'Player_PlaceShipPosition', properties:  {Position: position, Ship: ship.name, PositionInShip: i}});
-                        ship.addPosition(Battleship.ParsePosition(position));
-                }
+                //console.log();
+                //console.log(`Please enter the positions for the ${ship.name} (size: ${ship.size})`);
+                //const position = readline.question();
+                //var parsedPosition = Battleship.ParsePosition(position);
+                //var response = gameController.myBoard.addShip(ship, parsedPosition);
+                //gameController.myBoard.addShip(ship, )
+                Battleship.AskPosition(ship, gameController.myBoard);
+                //for (var i = 1; i < ship.size + 1; i++) {
+                //        console.log(`Enter position ${i} of ${ship.size} (i.e A3):`);
+                //        const position = readline.question();
+                //        telemetryWorker.postMessage({eventName: 'Player_PlaceShipPosition', properties:  {Position: position, Ship: ship.name, PositionInShip: i}});
+                //        ship.addPosition(Battleship.ParsePosition(position));
+                //}
             })
         }
     }

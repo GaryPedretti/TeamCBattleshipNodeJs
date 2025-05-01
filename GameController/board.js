@@ -34,14 +34,24 @@ class Board {
         return true;
     }
 
-    addShip(ship) {
-        var wasAdded = false;
+    expandPosition(ship, position){
+        const Position = require("./position.js");
+        ship.addPosition(position)
+        for(let index = position.row + 1; index < ship.size; index++){
+            ship.addPosition(new Position(position.column, index))
+        }
+        return ship
+    }
+
+    addShip(ship, position) {
+        var wasAdded = [false, ship];
+        ship = this.expandPosition(ship, position);
         if(this.shipOutofBounds(ship)) {
-            return false;
+            return wasAdded;
         }
         if(this.shipNotInConflict(ship)) {
-            mergeArrays();
-            wasAdded = true;
+            this.mergeArrays(ship);
+            wasAdded[0] = true;
         }
         return wasAdded;
     }
