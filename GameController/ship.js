@@ -16,7 +16,11 @@ class Ship {
         return this.name + " has been sunk";
     }
 
-    getHitButNotSunkMessage() {
+    getPlayerHitButNotSunkMessage() {
+        return this.name +" was hit but not sunk";
+    }
+
+    getEnemyHitButNotSunkMessage() {
         return "ship was hit but not sunk";
     }
 
