@@ -36,9 +36,14 @@ class Battleship {
 
     AlertHit(player, hitShip) {
         if (hitShip.sunk) {
-            console.log(player + " " + hitShip.getSunkMessage());
+            console.log(cliColor.red(player + " " + hitShip.getSunkMessage()));
         } else {
-            console.log(player + " " + hitShip.getHitButNotSunkMessage());
+            if (player == "Enemies") {
+                console.log(cliColor.red(player + " " + hitShip.getEnemyHitButNotSunkMessage()));
+            }
+            else {
+                console.log(cliColor.red(player + " " + hitShip.getPlayerHitButNotSunkMessage())); 
+            }
         }
     }
 
@@ -99,7 +104,7 @@ class Battleship {
                 console.log(cliColor.red("                   \\  \\   /  /"));
             }
 
-            console.log(isHit ? "Yeah ! Nice hit !" : "Miss");
+            console.log(isHit ? cliColor.red("Yeah ! Nice hit !") : cliColor.blue("Miss"));
             this.AlertHit("Enemies", hitShip);
             console.log("======================================");
             var computerPos = this.GetRandomPosition();
@@ -112,14 +117,14 @@ class Battleship {
             if (isHit) {
                 beep();
 
-                console.log("                \\         .  ./");
-                console.log("              \\      .:\";'.:..\"   /");
-                console.log("                  (M^^.^~~:.'\").");
-                console.log("            -   (/  .    . . \\ \\)  -");
-                console.log("               ((| :. ~ ^  :. .|))");
-                console.log("            -   (\\- |  \\ /  |  /)  -");
-                console.log("                 -\\  \\     /  /-");
-                console.log("                   \\  \\   /  /");
+                console.log(cliColor.red("                \\         .  ./"));
+                console.log(cliColor.red("              \\      .:\";'.:..\"   /"));
+                console.log(cliColor.red("                  (M^^.^~~:.'\")."));
+                console.log(cliColor.red("            -   (/  .    . . \\ \\)  -"));
+                console.log(cliColor.red("               ((| :. ~ ^  :. .|))"));
+                console.log(cliColor.red("            -   (\\- |  \\ /  |  /)  -"));
+                console.log(cliColor.red("                 -\\  \\     /  /-"));
+                console.log(cliColor.red("                   \\  \\   /  /"));
 
                 this.AlertHit("Your", hitShip);
             }
