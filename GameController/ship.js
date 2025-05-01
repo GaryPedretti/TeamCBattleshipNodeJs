@@ -28,10 +28,10 @@ class Ship {
         if(this.hits == 1 || this.hits == 0) {
             this.sunk = true;
             this.hits = 0;
-            return this.getSunkMessage();
+            //return this.getSunkMessage();
         }
         this.hits--;
-        return this.getHitButNotSunkMessage();
+        //return this.getHitButNotSunkMessage();
     }
 
 
