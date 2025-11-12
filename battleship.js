@@ -1,139 +1,91 @@
-const { Worker, isMainThread } = require('worker_threads');
 const readline = require('readline-sync');
-const gameController = require("./GameController/gameController.js");
 const cliColor = require('cli-color');
 const beep = require('beepbeep');
-const position = require("./GameController/position.js");
 const letters = require("./GameController/letters.js");
-let telemetryWorker;
+const position = require("./GameController/position.js");
+const gameController = require("./GameController/gameController.js");
+const { Worker } = require('worker_threads');
+
+class Board {
+    constructor(size = 8) {
+        this.size = size;
+        this.grid = Array.from({ length: size + 1 }, () => Array(size + 1).fill(null));
+    }
+
+    markHit(pos) { this.grid[pos.row][pos.column] = 'hit'; }
+    markMiss(pos) { this.grid[pos.row][pos.column] = 'miss'; }
+    markShip(pos) { this.grid[pos.row][pos.column] = 'ship'; }
+
+    printBoard(title, showShips = false) {
+        const hitColor = cliColor.red;
+        const missColor = cliColor.blue;
+        const shipColor = cliColor.green;
+        const waterColor = cliColor.white;
+
+        console.log(cliColor.cyan(`\n${title}\n`));
+        let header = '   A B C D E F G H';
+        console.log(header);
+        for (let row = 1; row <= this.size; row++) {
+            let line = `${row} `;
+            if (row < 10) line += ' ';
+            for (let col = 1; col <= this.size; col++) {
+                const cell = this.grid[row][col];
+                if (cell === 'hit') line += hitColor('X ');
+                else if (cell === 'miss') line += missColor('O ');
+                else if (cell === 'ship' && showShips) line += shipColor('S ');
+                else line += waterColor('. ');
+            }
+            console.log(line);
+        }
+    }
+}
 
 class Battleship {
+    constructor() {
+        this.boardSize = 8;
+        this.myBoard = new Board(this.boardSize);
+        this.enemyBoard = new Board(this.boardSize);
+        this.telemetryWorker = null;
+    }
+
     start() {
-        telemetryWorker = new Worker("./TelemetryClient/telemetryClient.js");   
+        this.telemetryWorker = new Worker("./TelemetryClient/telemetryClient.js");
+        this.telemetryWorker.postMessage({ eventName: 'ApplicationStarted', properties: { Technology: 'Node.js' } });
 
-        console.log("Starting...");
-        telemetryWorker.postMessage({eventName: 'ApplicationStarted', properties:  {Technology: 'Node.js'}});
+        console.log(cliColor.magenta("\n=== Welcome to Battleship ===\n"));
 
-        console.log(cliColor.magenta("                                     |__"));
-        console.log(cliColor.magenta("                                     |\\/"));
-        console.log(cliColor.magenta("                                     ---"));
-        console.log(cliColor.magenta("                                     / | ["));
-        console.log(cliColor.magenta("                              !      | |||"));
-        console.log(cliColor.magenta("                            _/|     _/|-++'"));
-        console.log(cliColor.magenta("                        +  +--|    |--|--|_ |-"));
-        console.log(cliColor.magenta("                     { /|__|  |/\\__|  |--- |||__/"));
-        console.log(cliColor.magenta("                    +---------------___[}-_===_.'____                 /\\"));
-        console.log(cliColor.magenta("                ____`-' ||___-{]_| _[}-  |     |_[___\\==--            \\/   _"));
-        console.log(cliColor.magenta(" __..._____--==/___]_|__|_____________________________[___\\==--____,------' .7"));
-        console.log(cliColor.magenta("|                        Welcome to Battleship                         BB-61/"));
-        console.log(cliColor.magenta(" \\_________________________________________________________________________|"));
-        console.log();
-
-        this.InitializeGame();
-        this.StartGame();
+        this.initializeGame();
+        this.gameLoop();
     }
 
-    StartGame() {
-        console.clear();
-        console.log("                  __");
-        console.log("                 /  \\");
-        console.log("           .-.  |    |");
-        console.log("   *    _.-'  \\  \\__/");
-        console.log("    \\.-'       \\");
-        console.log("   /          _/");
-        console.log("  |      _  /");
-        console.log("  |     /_\\'");
-        console.log("   \\    \\_/");
-        console.log("    \"\"\"\"");
-
-        do {
-            console.log();
-            console.log("Player, it's your turn");
-            console.log("Enter coordinates for your shot :");
-            var position = Battleship.ParsePosition(readline.question());
-            var isHit = gameController.CheckIsHit(this.enemyFleet, position);
-
-            telemetryWorker.postMessage({eventName: 'Player_ShootPosition', properties:  {Position: position.toString(), IsHit: isHit}});
-
-            if (isHit) {
-                beep();
-
-                console.log("                \\         .  ./");
-                console.log("              \\      .:\";'.:..\"   /");
-                console.log("                  (M^^.^~~:.'\").");
-                console.log("            -   (/  .    . . \\ \\)  -");
-                console.log("               ((| :. ~ ^  :. .|))");
-                console.log("            -   (\\- |  \\ /  |  /)  -");
-                console.log("                 -\\  \\     /  /-");
-                console.log("                   \\  \\   /  /");
-            }
-
-            console.log(isHit ? "Yeah ! Nice hit !" : "Miss");
-
-            var computerPos = this.GetRandomPosition();
-            var isHit = gameController.CheckIsHit(this.myFleet, computerPos);
-
-            telemetryWorker.postMessage({eventName: 'Computer_ShootPosition', properties:  {Position: computerPos.toString(), IsHit: isHit}});
-
-            console.log();
-            console.log(`Computer shot in ${computerPos.column}${computerPos.row} and ` + (isHit ? `has hit your ship !` : `miss`));
-            if (isHit) {
-                beep();
-
-                console.log("                \\         .  ./");
-                console.log("              \\      .:\";'.:..\"   /");
-                console.log("                  (M^^.^~~:.'\").");
-                console.log("            -   (/  .    . . \\ \\)  -");
-                console.log("               ((| :. ~ ^  :. .|))");
-                console.log("            -   (\\- |  \\ /  |  /)  -");
-                console.log("                 -\\  \\     /  /-");
-                console.log("                   \\  \\   /  /");
-            }
-        }
-        while (true);
+    initializeGame() {
+        this.initializeMyFleet();
+        this.initializeEnemyFleet();
     }
 
-    static ParsePosition(input) {
-        var letter = letters.get(input.toUpperCase().substring(0, 1));
-        var number = parseInt(input.substring(1, 2), 10);
-        return new position(letter, number);
-    }
-
-    GetRandomPosition() {
-        var rows = 8;
-        var lines = 8;
-        var rndColumn = Math.floor((Math.random() * lines));
-        var letter = letters.get(rndColumn + 1);
-        var number = Math.floor((Math.random() * rows));
-        var result = new position(letter, number);
-        return result;
-    }
-
-    InitializeGame() {
-        this.InitializeMyFleet();
-        this.InitializeEnemyFleet();
-    }
-
-    InitializeMyFleet() {
+    initializeMyFleet() {
         this.myFleet = gameController.InitializeShips();
 
-        console.log("Please position your fleet (Game board size is from A to H and 1 to 8) :");
-
-        this.myFleet.forEach(function (ship) {
-            console.log();
-            console.log(`Please enter the positions for the ${ship.name} (size: ${ship.size})`);
-            for (var i = 1; i < ship.size + 1; i++) {
-                    console.log(`Enter position ${i} of ${ship.size} (i.e A3):`);
-                    const position = readline.question();
-                    telemetryWorker.postMessage({eventName: 'Player_PlaceShipPosition', properties:  {Position: position, Ship: ship.name, PositionInShip: i}});
-                    ship.addPosition(Battleship.ParsePosition(position));
+        console.log(cliColor.yellow("Please position your fleet (A-H for columns, 1-8 for rows):"));
+        this.myFleet.forEach(ship => {
+            console.log(cliColor.yellow(`\nPosition your ${ship.name} (size: ${ship.size}):`));
+            for (let i = 1; i <= ship.size; i++) {
+                let posInput = readline.question(`Enter position ${i} of ${ship.size} (e.g., A3): `);
+                let pos = Battleship.parsePosition(posInput);
+                this.myBoard.markShip(pos);
+                ship.addPosition(pos);
+                this.telemetryWorker.postMessage({
+                    eventName: 'Player_PlaceShipPosition',
+                    properties: { Position: posInput, Ship: ship.name, PositionInShip: i }
+                });
             }
-        })
+        });
     }
 
-    InitializeEnemyFleet() {
+    initializeEnemyFleet() {
         this.enemyFleet = gameController.InitializeShips();
 
+        // Hardcoded for simplicity
         this.enemyFleet[0].addPosition(new position(letters.B, 4));
         this.enemyFleet[0].addPosition(new position(letters.B, 5));
         this.enemyFleet[0].addPosition(new position(letters.B, 6));
@@ -155,6 +107,89 @@ class Battleship {
 
         this.enemyFleet[4].addPosition(new position(letters.C, 5));
         this.enemyFleet[4].addPosition(new position(letters.C, 6));
+    }
+
+    gameLoop() {
+        const msgColor = cliColor.yellow;
+
+        while (!gameController.allShipsSunk(this.myFleet) && !gameController.allShipsSunk(this.enemyFleet)) {
+            console.clear();
+
+            console.log(cliColor.magenta("\n================ PLAYER TURN ================\n"));
+            this.enemyBoard.printBoard("Enemy Board", false);
+
+            console.log(msgColor("Next possible steps:"));
+            console.log(msgColor("- Enter coordinates to shoot (e.g., A3)"));
+            console.log(msgColor("- Type 'board' to see your fleet"));
+            console.log(msgColor("- Type 'exit' to quit"));
+            console.log();
+
+            let input = readline.question("Enter coordinates for your shot: ").toUpperCase();
+
+            if (input === 'EXIT') break;
+            if (input === 'BOARD') {
+                this.myBoard.printBoard("My Fleet", true);
+                input = readline.question("Enter coordinates for your shot: ").toUpperCase();
+            }
+
+            const playerPos = Battleship.parsePosition(input);
+            const isHit = gameController.CheckIsHit(this.enemyFleet, playerPos);
+
+            if (isHit) {
+                this.enemyBoard.markHit(playerPos);
+                beep();
+                console.log(cliColor.red("\nHit!"));
+            } else {
+                this.enemyBoard.markMiss(playerPos);
+                console.log(cliColor.blue("\nMiss!"));
+            }
+
+            this.telemetryWorker.postMessage({
+                eventName: 'Player_ShootPosition',
+                properties: { Position: input, IsHit: isHit }
+            });
+
+            // Computer turn
+            console.log(cliColor.magenta("\n================ COMPUTER TURN ================\n"));
+            const computerPos = this.getRandomPosition();
+            const compHit = gameController.CheckIsHit(this.myFleet, computerPos);
+
+            if (compHit) {
+                this.myBoard.markHit(computerPos);
+                beep();
+                console.log(cliColor.red(`Computer hits at ${computerPos.column}${computerPos.row}!`));
+            } else {
+                this.myBoard.markMiss(computerPos);
+                console.log(cliColor.blue(`Computer misses at ${computerPos.column}${computerPos.row}.`));
+            }
+
+            this.telemetryWorker.postMessage({
+                eventName: 'Computer_ShootPosition',
+                properties: { Position: `${computerPos.column}${computerPos.row}`, IsHit: compHit }
+            });
+
+            readline.question(cliColor.cyan("\nPress Enter to continue..."));
+        }
+
+        console.log(cliColor.magenta("\n=== GAME OVER ===\n"));
+        if (gameController.allShipsSunk(this.enemyFleet)) console.log(cliColor.green("You won!"));
+        else console.log(cliColor.red("You lost!"));
+
+        this.telemetryWorker.postMessage({ eventName: 'ApplicationEnded' });
+        this.telemetryWorker.terminate();
+    }
+
+    getRandomPosition() {
+        const row = Math.floor(Math.random() * this.boardSize) + 1;
+        const col = Math.floor(Math.random() * this.boardSize) + 1;
+        const letter = letters.get(col);
+        return new position(letter, row);
+    }
+
+    static parsePosition(input) {
+        const letter = letters.get(input[0].toUpperCase());
+        const number = parseInt(input.slice(1), 10);
+        return new position(letter, number);
     }
 }
 
