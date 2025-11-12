@@ -40,6 +40,7 @@ class Board {
     }
 }
 
+
 class Battleship {
     constructor() {
         this.boardSize = 8;
