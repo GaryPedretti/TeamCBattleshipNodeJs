@@ -64,25 +64,57 @@ class Battleship {
         this.initializeEnemyFleet();
     }
 
-    initializeMyFleet() {
-        this.myFleet = gameController.InitializeShips();
+   initializeMyFleet() {
+    this.myFleet = gameController.InitializeShips();
 
-        console.log(cliColor.yellow("Please position your fleet (A-H for columns, 1-8 for rows):"));
+    if (false) {
+        console.log(cliColor.yellow("Please position your fleet (A–H for columns, 1–8 for rows):"));
+
         this.myFleet.forEach(ship => {
             console.log(cliColor.yellow(`\nPosition your ${ship.name} (size: ${ship.size}):`));
+
             for (let i = 1; i <= ship.size; i++) {
-                let posInput = readline.question(`Enter position ${i} of ${ship.size} (e.g., A3): `);
-                let pos = Battleship.parsePosition(posInput);
+                const posInput = readline.question(`Enter position ${i} of ${ship.size} (e.g., A3): `);
+                const pos = Battleship.parsePosition(posInput);
+
                 this.myBoard.markShip(pos);
                 ship.addPosition(pos);
+
                 this.telemetryWorker.postMessage({
                     eventName: 'Player_PlaceShipPosition',
-                    properties: { Position: posInput, Ship: ship.name, PositionInShip: i }
+                    properties: {
+                        Position: posInput,
+                        Ship: ship.name,
+                        PositionInShip: i
+                    }
                 });
             }
         });
-    }
+    } else {
+        // Hardcoded for simplicity
+        this.myFleet[0].addPosition(new position(letters.B, 4));
+        this.myFleet[0].addPosition(new position(letters.B, 5));
+        this.myFleet[0].addPosition(new position(letters.B, 6));
+        this.myFleet[0].addPosition(new position(letters.B, 7));
+        this.myFleet[0].addPosition(new position(letters.B, 8));
 
+        this.myFleet[1].addPosition(new position(letters.E, 5));
+        this.myFleet[1].addPosition(new position(letters.E, 6));
+        this.myFleet[1].addPosition(new position(letters.E, 7));
+        this.myFleet[1].addPosition(new position(letters.E, 8));
+
+        this.myFleet[2].addPosition(new position(letters.A, 3));
+        this.myFleet[2].addPosition(new position(letters.B, 3));
+        this.myFleet[2].addPosition(new position(letters.C, 3));
+
+        this.myFleet[3].addPosition(new position(letters.F, 8));
+        this.myFleet[3].addPosition(new position(letters.G, 8));
+        this.myFleet[3].addPosition(new position(letters.H, 8));
+
+        this.myFleet[4].addPosition(new position(letters.C, 5));
+        this.myFleet[4].addPosition(new position(letters.C, 6));
+    }
+}
     initializeEnemyFleet() {
         this.enemyFleet = gameController.InitializeShips();
 
