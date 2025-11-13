@@ -176,7 +176,7 @@ class Battleship {
                 this.enemyBoard.markMiss(playerPos);
                 console.log(cliColor.blue("\nMiss!"));
             }
-
+            console.log(playerPos);
             this.telemetryWorker.postMessage({
                 eventName: 'Player_ShootPosition',
                 properties: { Position: input, IsHit: isHit }
