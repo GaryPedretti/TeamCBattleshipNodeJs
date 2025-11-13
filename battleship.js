@@ -20,7 +20,7 @@ class Board {
         const hitColor = cliColor.red;
         const missColor = cliColor.blue;
         const shipColor = cliColor.green;
-        const waterColor = cliColor.white;
+        const waterColor = cliColor.blue;
 
         console.log(cliColor.cyan(`\n${title}\n`));
         let header = '   A B C D E F G H';
@@ -125,10 +125,10 @@ class Battleship {
         this.enemyFleet[0].addPosition(new position(letters.B, 7));
         this.enemyFleet[0].addPosition(new position(letters.B, 8));
 
+        this.enemyFleet[1].addPosition(new position(letters.E, 5));
         this.enemyFleet[1].addPosition(new position(letters.E, 6));
         this.enemyFleet[1].addPosition(new position(letters.E, 7));
         this.enemyFleet[1].addPosition(new position(letters.E, 8));
-        this.enemyFleet[1].addPosition(new position(letters.E, 9));
 
         this.enemyFleet[2].addPosition(new position(letters.A, 3));
         this.enemyFleet[2].addPosition(new position(letters.B, 3));
@@ -149,7 +149,7 @@ class Battleship {
             console.clear();
 
             console.log(cliColor.magenta("\n================ PLAYER TURN ================\n"));
-            this.enemyBoard.printBoard("Enemy Board", false);
+            this.enemyBoard.printBoard("Enemy Board", true);
 
             console.log(msgColor("Next possible steps:"));
             console.log(msgColor("- Enter coordinates to shoot (e.g., A3)"));
